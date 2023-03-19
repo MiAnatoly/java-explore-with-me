@@ -1,21 +1,25 @@
 package dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 public class HitDto {
-    @NotNull
+    @NotBlank
     private String app;
-    @NotNull
+    @NotBlank
     private String uri;
-    @NotNull
+    @NotBlank
     private String ip;
-    @NotNull
-    private String timestamp;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime timestamp;
 }

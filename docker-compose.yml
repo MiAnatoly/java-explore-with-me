@@ -10,7 +10,7 @@ services:
       - stats-db
     environment:
       - TZ=Europe/London
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://stats-db:5432/explore
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://stats-db:5432/stats
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=root
 
@@ -21,7 +21,7 @@ services:
       - "5432:5432"
     environment:
       - TZ=Europe/London
-      - POSTGRES_DB=explore
+      - POSTGRES_DB=stats
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=root
 
@@ -35,7 +35,7 @@ services:
       - ewn-db
     environment:
       - TZ=Europe/London
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://ewn-db:5432/explore
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://ewn-db:5432/ewn
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=root
 
@@ -47,6 +47,6 @@ services:
       - "6541:6541"
     environment:
       - TZ=Europe/London
-      - POSTGRES_DB=explore
+      - POSTGRES_DB=ewn
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=root

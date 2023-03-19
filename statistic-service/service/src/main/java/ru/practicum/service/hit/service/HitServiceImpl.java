@@ -11,7 +11,6 @@ import ru.practicum.service.hit.dao.HitRepository;
 import ru.practicum.service.hit.model.EndpointHit;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Transactional(readOnly = true)
@@ -20,25 +19,29 @@ import java.util.List;
 @RequiredArgsConstructor
 public class HitServiceImpl implements HitService {
     private final HitRepository hitRepository;
-    private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     @Transactional
     @Override
     public void add(HitDto hitDto) {
-        LocalDateTime created = LocalDateTime.parse(hitDto.getTimestamp(), dateFormatter);
-        EndpointHit hit = HitMapper.toHit(created, hitDto);
+        EndpointHit hit = HitMapper.toHit(hitDto);
         hit = hitRepository.save(hit);
-        log.info("добавлен запрос id:" + hit.getId() + " + app:" + hit.getApp() + " ip:" + hit.getIp());
+        log.info("добавлен запрос id:{}, app:{}, ip:{}", hit.getId(), hitDto.getApp(), hitDto.getIp());
     }
 
     @Override
-    public List<ViewStats> find(String start, String end, List<String> uris, Boolean unique) {
-        LocalDateTime startTime = LocalDateTime.parse(start, dateFormatter);
-        LocalDateTime endTime = LocalDateTime.parse(end, dateFormatter);
-        if (unique) {
-            return hitRepository.findUniqueTrue(startTime, endTime, uris);
+    public List<ViewStats> find(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
+        if (unique) { // уникальный пользователь
+            if (uris == null) {
+                return hitRepository.findUniqueTrueWithoutUris(start, end);
+            } else {
+                return hitRepository.findUniqueTrue(start, end, uris);
+            }
         } else {
-            return hitRepository.findUniqueFalse(startTime, endTime, uris);
+            if (uris == null) {
+                return hitRepository.findUniqueFalseWithoutUris(start, end);
+            } else {
+                return hitRepository.findUniqueFalse(start, end, uris);
+            }
         }
     }
 }

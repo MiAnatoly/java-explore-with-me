@@ -10,6 +10,7 @@ import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -30,7 +31,7 @@ public class HitClient extends BaseClient {
         return post(hitDto);
     }
 
-    public ResponseEntity<Object> find(String start, String end, List<String> uris, Boolean unique) {
+    public ResponseEntity<Object> find(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
         String path = "/stats";
         Map<String, Object> parameters = Map.of(
                 "start", start,
