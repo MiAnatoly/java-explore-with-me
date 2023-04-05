@@ -29,12 +29,12 @@ public class EventsPublicController {
 
     @GetMapping
     public ResponseEntity<Object> search(
-            @RequestParam(required = false) String text,
+            @RequestParam(defaultValue = "") String text,
             @RequestParam(required = false) List<Long> categories,
             @RequestParam(required = false) Boolean paid,
             @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime rangeStart,
             @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime rangeEnd,
-            @RequestParam(required = false) Boolean onlyAvailable,
+            @RequestParam(defaultValue = "false") Boolean onlyAvailable,
             @RequestParam(required = false) String sort,
             @RequestParam(defaultValue = "0") @Min(0) Integer from,
             @RequestParam(defaultValue = "10") @Min(1) Integer size,
@@ -42,9 +42,8 @@ public class EventsPublicController {
     ) {
         int page = ValidPage.page(from, size);
         log.info("Get search");
-        return new ResponseEntity<>(
-                service.search(text, categories, paid, rangeStart, rangeEnd, onlyAvailable, sort, page, size, request),
-                HttpStatus.OK);
+        return new ResponseEntity<>(service.search(text, categories, paid, rangeStart, rangeEnd, onlyAvailable,
+                        sort, page, size, request), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")

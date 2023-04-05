@@ -13,10 +13,12 @@ import ru.practicum.ewmservice.exception.NotObjectException;
 import ru.practicum.ewmservice.joint.events.JointEvents;
 import ru.practicum.ewmservice.model.events.Event;
 import ru.practicum.ewmservice.model.requests.Request;
+import ru.practicum.ewmservice.status.Sort;
 import ru.practicum.ewmservice.status.Status;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -36,18 +38,38 @@ public class EventsPublicServiceImpl implements EventsPublicService {
         List<Event> events;
         List<ViewStats> views;
         if (rangeStart == null || rangeEnd == null) {
-            events = eventsRepository.searchWithoutDate(text, categories, paid,
-                    PageRequest.of(page, size)).getContent();
+            if (paid != null) {
+                events = eventsRepository.searchWithoutDate(text, categories, paid,
+                        PageRequest.of(page, size)).getContent();
+            } else {
+                events = eventsRepository.searchWithoutDate(text, categories,
+                        PageRequest.of(page, size)).getContent();
+            }
             views = jointEvents.findViewStats(events, true);
         } else {
-            events = eventsRepository.search(text, categories, paid, rangeStart,
-                    rangeEnd, PageRequest.of(page, size)).getContent();
+            if (paid != null) {
+                events = eventsRepository.search(text, categories, paid, rangeStart,
+                        rangeEnd, PageRequest.of(page, size)).getContent();
+            } else {
+                events = eventsRepository.search(text, categories, rangeStart,
+                        rangeEnd, PageRequest.of(page, size)).getContent();
+            }
+
             views = jointEvents.findViewStatsWeb(rangeStart, rangeEnd, events, true);
         }
         List<Request> requests = requestsRepository.findByEventInAndStatus(events, Status.PENDING);
         jointEvents.addHitWeb(request);
         log.info("Get events count {} EventsPublicService", events.size());
-        return jointEvents.toEventsFullDto(events, views, requests);
+        List<EventFullDto> sortEvents = jointEvents.toEventsFullDto(events, views, requests);
+        if (sort == null) {
+            return sortEvents;
+        }
+        if (sort.equals(Sort.EVENT_DATE.toString())) {
+            sortEvents.sort(Comparator.comparing(EventFullDto::getEventDate));
+        } else if (sort.equals(Sort.VIEWS.toString())) {
+            sortEvents.sort(Comparator.comparing(EventFullDto::getViews));
+        }
+        return sortEvents;
     }
 
     @Transactional

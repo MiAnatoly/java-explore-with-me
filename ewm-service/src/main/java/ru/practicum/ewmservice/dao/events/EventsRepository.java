@@ -28,33 +28,45 @@ public interface EventsRepository extends JpaRepository<Event, Long> {
 
     List<Event> findByCompilation_Id(Long id);
 
-    @Query("select e from Event e where (?2 is null or e.category.id in ?2) " +
+    @Query("select e from Event e where (e.category.id is null or (e.category.id in ?2)) " +
             "and e.paid = ?3 and (e.createdOn between ?4 and ?5)" +
             "and (upper(e.annotation) like upper(concat('%', ?1, '%')) " +
             "or upper(e.description) like upper(concat('%', ?1, '%')))")
     Page<Event> search(String text, List<Long> categories, Boolean paid, LocalDateTime rangeStart,
                        LocalDateTime rangeEnd, Pageable pageable);
 
-    @Query("select e from Event e where (?2 is null or e.category.id in ?2) " +
+    @Query("select e from Event e where (e.category.id is null or (e.category.id in ?2)) " +
+            "and (e.createdOn between ?3 and ?4)" +
+            "and (upper(e.annotation) like upper(concat('%', ?1, '%')) " +
+            "or upper(e.description) like upper(concat('%', ?1, '%')))")
+    Page<Event> search(String text, List<Long> categories, LocalDateTime rangeStart,
+                       LocalDateTime rangeEnd, Pageable pageable);
+
+    @Query("select e from Event e where (e.category.id is null or (e.category.id in ?2)) " +
             "and e.paid = ?3 and (upper(e.annotation) like upper(concat('%', ?1, '%')) " +
             "or upper(e.description) like upper(concat('%', ?1, '%')))")
     Page<Event> searchWithoutDate(String text, List<Long> categories, Boolean paid, Pageable pageable);
 
-    @Query("select e from Event e where (?1 is null or e.initiator.id in ?1) and e.state in ?2" +
-            " and (?3 is null or e.category.id in ?3)")
+    @Query("select e from Event e where (e.category.id is null or (e.category.id in ?2)) " +
+            "and (upper(e.annotation) like upper(concat('%', ?1, '%')) " +
+            "or upper(e.description) like upper(concat('%', ?1, '%')))")
+    Page<Event> searchWithoutDate(String text, List<Long> categories, Pageable pageable);
+
+    @Query("select e from Event e where (e.initiator.id is null or (e.initiator.id in ?1)) and e.state in ?2" +
+            " and (e.category.id is null or (e.category.id in ?3))")
     Page<Event> searchAdmin(List<Long> users, List<State> states, List<Long> categories, Pageable pageable);
 
-    @Query("select e from Event e where (?1 is null or e.initiator.id in ?1) and e.state in ?2" +
-            " and (?3 is null or e.category.id in ?3) and e.createdOn between ?4 and ?5")
+    @Query("select e from Event e where (e.initiator.id is null or (e.initiator.id in ?1)) and e.state in ?2" +
+            " and (e.category.id is null or (e.category.id in ?3)) and e.createdOn between ?4 and ?5")
     Page<Event> searchAdminWithDate(List<Long> users, List<State> states, List<Long> categories,
                                      LocalDateTime rangeStart, LocalDateTime rangeEnd, Pageable pageable);
 
     @Query("select e from Event e where (?1 is null or e.initiator.id in ?1)" +
-            " and (?2 is null or e.category.id in ?2)")
+            " and (e.category.id is null or (e.category.id in ?2))")
     Page<Event> searchAdminAllState(List<Long> users, List<Long> categories, Pageable pageable);
 
-    @Query("select e from Event e where (?1 is null or e.initiator.id in ?1)" +
-            " and (?2 is null or e.category.id in ?2) and e.createdOn between ?3 and ?4")
+    @Query("select e from Event e where (e.initiator.id is null or (e.initiator.id in ?1))" +
+            " and (e.category.id is null or (e.category.id in ?2)) and e.createdOn between ?3 and ?4")
     Page<Event> searchAdminWithDateAllState(List<Long> users, List<Long> categories,
                                      LocalDateTime rangeStart, LocalDateTime rangeEnd, Pageable pageable);
 
