@@ -29,4 +29,20 @@ public interface HitRepository extends JpaRepository<EndpointHit, Long> {
             "from EndpointHit b where b.timestamp between ?1 and ?2" +
             " group by b.uri, b.app order by count(b.ip) DESC")
     List<ViewStats> findUniqueTrueWithoutUris(LocalDateTime start, LocalDateTime end);
+
+    @Query("select new dto.ViewStats(b.app, b.uri, count(DISTINCT b.ip)) " +
+            "from EndpointHit b group by b.uri, b.app order by count(b.ip) DESC")
+    List<ViewStats> findUniqueTrueWithoutParam();
+
+    @Query("select new dto.ViewStats(b.app, b.uri, count(b.ip)) " +
+            "from EndpointHit b  group by b.uri, b.app order by count(b.ip) DESC")
+    List<ViewStats> findUniqueFalseWithoutParam();
+
+    @Query("select new dto.ViewStats(b.app, b.uri, count(DISTINCT b.ip)) " +
+            "from EndpointHit b where b.uri in ?1 group by b.uri, b.app order by count(b.ip) DESC")
+    List<ViewStats> findUniqueTrueWithoutDate(List<String> uris);
+
+    @Query("select new dto.ViewStats(b.app, b.uri, count(b.ip)) " +
+            "from EndpointHit b where b.uri in ?1  group by b.uri, b.app order by count(b.ip) DESC")
+    List<ViewStats> findUniqueFalseWithoutDate(List<String> uris);
 }
