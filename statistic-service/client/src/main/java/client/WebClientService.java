@@ -18,7 +18,7 @@ import java.util.List;
 public class WebClientService {
     private final WebClient webClient;
 
-    public WebClientService(@Value("${service.url}") String serverUrl, WebClient.Builder webClientBuilder) {
+    public WebClientService(@Value("${stats-server.url}") String serverUrl, WebClient.Builder webClientBuilder) {
         this.webClient = webClientBuilder.baseUrl(serverUrl).build();
     }
 
