@@ -13,6 +13,7 @@ import ru.practicum.ewmservice.valide.NowBeforeDate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -25,14 +26,12 @@ public class Event {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "EVENT_ID", nullable = false)
     private Long id;
-    @Column(name = "ANNOTATION")
     private String annotation;
     @ManyToOne
     @JoinColumn(name = "CATEGORY_ID")
     private Category category;
     @Column(name = "CREATED_ON")
     private LocalDateTime createdOn;
-    @Column(name = "DESCRIPTION")
     private String description;
     @Column(name = "EVENT_DATE")
     @NowBeforeDate(hours = 2)
@@ -41,22 +40,18 @@ public class Event {
     @JoinColumn(name = "INITIATOR_ID")
     private User initiator;
     @ManyToOne
-    @JoinColumn(name = "LOCATION_ID")
+    @JoinColumns({@JoinColumn(name = "LOT"), @JoinColumn(name = "LON")})
     private Location location;
-    @Column(name = "PAID")
-    private Boolean paid;
+    private boolean paid;
     @Column(name = "PARTICIPANT_LIMIT")
     private Integer participantLimit;
     @Column(name = "PUBLISHED_ON")
     private LocalDateTime publishedOn;
     @Column(name = "REQUEST_MODERATION")
-    private Boolean requestModeration;
+    private boolean requestModeration;
     @Enumerated(EnumType.STRING)
-    @Column(name = "STATE")
     private State state;
-    @Column(name = "TITLE")
     private String title;
-    @ManyToOne
-    @JoinColumn(name = "COMPILATION_ID")
-    private Compilation compilation;
+    @ManyToMany(mappedBy = "events")
+    private List<Compilation> compilations;
 }

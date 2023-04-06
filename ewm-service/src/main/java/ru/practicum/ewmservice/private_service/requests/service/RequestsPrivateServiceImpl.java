@@ -58,7 +58,7 @@ public class RequestsPrivateServiceImpl implements RequestsPrivateService {
             if (requests.size() >= event.getParticipantLimit()) {
                 throw new ConflictObjectException("достигнут лимит запросов");
             }
-            if (event.getRequestModeration()) {
+            if (event.isRequestModeration()) {
                     request = RequestsMapper.toRequest(user, event, Status.PENDING);
                 } else {
                 request = RequestsMapper.toRequest(user, event, Status.CONFIRMED);

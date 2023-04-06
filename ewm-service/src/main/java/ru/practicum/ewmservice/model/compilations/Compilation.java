@@ -4,8 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ru.practicum.ewmservice.model.events.Event;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @Setter
@@ -18,8 +20,12 @@ public class Compilation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "COMPILATION_ID", nullable = false)
     private Long id;
-    @Column(name = "PINNED")
     private Boolean pinned;
-    @Column(name = "TITLE")
     private String title;
+    @ManyToMany
+    @JoinTable(
+            name = "EVENT_COMPILATION",
+            joinColumns = @JoinColumn(name = "COMPILATION_ID"),
+            inverseJoinColumns = @JoinColumn(name = "EVENT_ID"))
+    private List<Event> events;
 }

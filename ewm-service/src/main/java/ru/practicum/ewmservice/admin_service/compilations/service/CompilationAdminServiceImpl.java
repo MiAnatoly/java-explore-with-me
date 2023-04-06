@@ -10,6 +10,7 @@ import ru.practicum.ewmservice.dao.events.EventsRepository;
 import ru.practicum.ewmservice.dao.requests.RequestsRepository;
 import ru.practicum.ewmservice.dto.compilation.CompilationDto;
 import ru.practicum.ewmservice.dto.compilation.NewCompilationDto;
+import ru.practicum.ewmservice.dto.compilation.UpdateCompilationRequest;
 import ru.practicum.ewmservice.dto.events.EventShortDto;
 import ru.practicum.ewmservice.exception.NotObjectException;
 import ru.practicum.ewmservice.joint.events.JointEvents;
@@ -33,18 +34,18 @@ public class CompilationAdminServiceImpl implements CompilationsAdminService {
     private final JointEvents jointEvents;
 
     @Transactional
+    @Override
     public CompilationDto add(NewCompilationDto newCompilationDto) {
         Compilation compilation;
         if (newCompilationDto.getEvents().isEmpty()) {
-            compilation = CompilationMapper.toCompilation(newCompilationDto);
+            compilation = CompilationMapper.toCompilation(newCompilationDto, List.of());
             compilationRepository.save(compilation);
             log.info("Post compilation count events CompilationAdminService");
             return CompilationMapper.toCompilationDto(compilation, List.of());
         }
         List<Event> events = eventsRepository.findByIdIn(newCompilationDto.getEvents());
-        compilation = CompilationMapper.toCompilation(newCompilationDto);
+        compilation = CompilationMapper.toCompilation(newCompilationDto, events);
         compilationRepository.save(compilation);
-        events.forEach(x -> x.setCompilation(compilation));
         List<ViewStats> views = jointEvents.findViewStats(events, true);
         List<Request> requests = requestsRepository.findByEventInAndStatus(events, Status.PENDING);
         log.info("Post compilation count events {} CompilationAdminService", events.size());
@@ -53,20 +54,21 @@ public class CompilationAdminServiceImpl implements CompilationsAdminService {
     }
 
     @Transactional
+    @Override
     public void remove(Long compId) {
         compilationRepository.deleteById(compId);
         log.info("Delete compilation{} CompilationAdminService", compId);
     }
 
     @Transactional
-    public CompilationDto edit(Long compId, NewCompilationDto newCompilationDto) {
+    @Override
+    public CompilationDto edit(Long compId, UpdateCompilationRequest updateCompilationDto) {
         Compilation compilation = compilationRepository.findById(compId)
                 .orElseThrow(() -> new NotObjectException("not compilation"));
-        List<Event> eventsOld = eventsRepository.findByCompilation_Id(compId);
-        eventsOld.forEach(x -> x.setCompilation(null));
+        List<Event> eventsOld = compilation.getEvents();
         log.info("list {}", eventsOld);
-        List<Event> events = eventsRepository.findByIdInAndState(newCompilationDto.getEvents(), State.PUBLISHED);
-        setUpdateCompilation(compilation, newCompilationDto, events);
+        List<Event> events = eventsRepository.findByIdInAndState(updateCompilationDto.getEvents(), State.PUBLISHED);
+        setUpdateCompilation(compilation, updateCompilationDto, events);
         List<ViewStats> views = jointEvents.findViewStats(events, true);
         List<Request> requests = requestsRepository.findByEventInAndStatus(events, Status.PENDING);
         log.info("Patch compilation count events {} CompilationAdminService", events.size());
@@ -75,13 +77,11 @@ public class CompilationAdminServiceImpl implements CompilationsAdminService {
     }
 
     private void setUpdateCompilation(Compilation compilation,
-                                      NewCompilationDto newCompilationDto, List<Event> events) {
-        events.forEach(x -> x.setCompilation(compilation));
-        if (newCompilationDto.getPinned() != null) {
-            compilation.setPinned(newCompilationDto.getPinned());
-        }
-        if (newCompilationDto.getTitle() != null) {
-            compilation.setTitle(newCompilationDto.getTitle());
+                                      UpdateCompilationRequest updateCompilationDto, List<Event> events) {
+        compilation.setEvents(events);
+            compilation.setPinned(updateCompilationDto.isPinned());
+        if (updateCompilationDto.getTitle() != null && updateCompilationDto.getTitle().isBlank()) {
+            compilation.setTitle(updateCompilationDto.getTitle());
         }
     }
 }

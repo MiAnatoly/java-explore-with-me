@@ -6,18 +6,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.ewmservice.dao.categories.CategoriesRepository;
 import ru.practicum.ewmservice.dao.events.EventsRepository;
-import ru.practicum.ewmservice.dao.location.LocationRepository;
 import ru.practicum.ewmservice.dao.requests.RequestsRepository;
 import ru.practicum.ewmservice.dto.events.EventFullDto;
 import ru.practicum.ewmservice.dto.events.UpdateEventAdminRequest;
 import ru.practicum.ewmservice.exception.ConflictObjectException;
 import ru.practicum.ewmservice.exception.NotObjectException;
 import ru.practicum.ewmservice.joint.events.JointEvents;
-import ru.practicum.ewmservice.model.categories.Category;
 import ru.practicum.ewmservice.model.events.Event;
-import ru.practicum.ewmservice.model.location.Location;
 import ru.practicum.ewmservice.model.requests.Request;
 import ru.practicum.ewmservice.status.State;
 import ru.practicum.ewmservice.status.StateActionAdmin;
@@ -33,8 +29,6 @@ import java.util.List;
 public class EventsAdminServiceImpl implements EventsAdminService {
     private final EventsRepository eventsRepository;
     private final RequestsRepository requestsRepository;
-    private final LocationRepository locationRepository;
-    private final CategoriesRepository categoriesRepository;
     private final JointEvents jointEvents;
 
     @Override
@@ -95,36 +89,6 @@ public class EventsAdminServiceImpl implements EventsAdminService {
                 throw new ConflictObjectException("событие не в состояние публикации");
             }
         }
-        if (updateEvent.getAnnotation() != null) {
-            event.setAnnotation(updateEvent.getAnnotation());
-        }
-        if (updateEvent.getCategory() != null) {
-            Category category = categoriesRepository.findById(updateEvent.getCategory())
-                    .orElseThrow(() -> new NotObjectException("no category"));
-            event.setCategory(category);
-        }
-        if (updateEvent.getDescription() != null) {
-            event.setDescription(updateEvent.getDescription());
-        }
-        if (updateEvent.getEventDate() != null) {
-            if (LocalDateTime.now().isBefore(updateEvent.getEventDate())) {
-                event.setEventDate(updateEvent.getEventDate());
-            } else {
-                throw new ConflictObjectException("нельзя изменить дату события на уже наступившую");
-            }
-        }
-        if (updateEvent.getLocation() != null) {
-            Location location = locationRepository.save(updateEvent.getLocation());
-            event.setLocation(location);
-        }
-        if (updateEvent.getPaid() != null) {
-            event.setPaid(updateEvent.getPaid());
-        }
-        if (updateEvent.getParticipantLimit() != null) {
-            event.setParticipantLimit(updateEvent.getParticipantLimit());
-        }
-        if (updateEvent.getTitle() != null) {
-            event.setTitle(updateEvent.getTitle());
-        }
+        jointEvents.setUpdateEvent(event, updateEvent);
     }
 }

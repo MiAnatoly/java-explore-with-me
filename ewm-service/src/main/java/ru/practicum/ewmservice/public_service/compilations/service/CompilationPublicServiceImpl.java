@@ -7,7 +7,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.ewmservice.dao.compilation.CompilationRepository;
-import ru.practicum.ewmservice.dao.events.EventsRepository;
 import ru.practicum.ewmservice.dao.requests.RequestsRepository;
 import ru.practicum.ewmservice.dto.compilation.CompilationDto;
 import ru.practicum.ewmservice.dto.events.EventShortDto;
@@ -19,10 +18,10 @@ import ru.practicum.ewmservice.model.events.Event;
 import ru.practicum.ewmservice.model.requests.Request;
 import ru.practicum.ewmservice.status.Status;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -31,7 +30,6 @@ import java.util.stream.Collectors;
 public class CompilationPublicServiceImpl implements CompilationPublicService {
     private final CompilationRepository compilationRepository;
     private final RequestsRepository requestsRepository;
-    private final EventsRepository eventsRepository;
     private final JointEvents jointEvents;
 
     @Override
@@ -55,22 +53,20 @@ public class CompilationPublicServiceImpl implements CompilationPublicService {
     }
 
     private Map<Long, List<EventShortDto>> toCompilationsInEvens(List<Compilation> compilations) {
-        List<Event> events = eventsRepository.findByCompilationIn(compilations);
+        List<Event> events = new ArrayList<>();
+        compilations.forEach(x -> events.addAll(x.getEvents()));
         List<ViewStats> views = jointEvents.findViewStats(events, true);
         List<Request> requests = requestsRepository.findByEventInAndStatus(events, Status.PENDING);
         Map<Long, List<EventShortDto>> eventsShortDtoMap = new HashMap<>();
         compilations.forEach(x -> eventsShortDtoMap
-                .put(x.getId(), jointEvents.toEventsShortDto(
-                        events.stream()
-                                .filter(y -> y.getCompilation().equals(x))
-                                .collect(Collectors.toList()),
+                .put(x.getId(), jointEvents.toEventsShortDto(x.getEvents(),
                         views,
                         requests)));
          return eventsShortDtoMap;
     }
 
     private List<EventShortDto> toCompilationInEvens(Compilation compilation) {
-        List<Event> events = eventsRepository.findByCompilation_Id(compilation.getId());
+        List<Event> events = compilation.getEvents();
         List<ViewStats> views = jointEvents.findViewStats(events, true);
         List<Request> requests = requestsRepository.findByEventInAndStatus(events, Status.PENDING);
         return jointEvents.toEventsShortDto(events, views, requests);

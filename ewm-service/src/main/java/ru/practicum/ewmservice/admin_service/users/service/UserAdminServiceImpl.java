@@ -22,7 +22,12 @@ public class UserAdminServiceImpl implements UserAdminService {
 
     @Override
     public List<UserDto> findAll(List<Long> ids, Integer page, Integer size) {
-        List<User> users = repository.findByIdIn(ids, PageRequest.of(page, size)).getContent();
+        List<User> users;
+        if (ids == null) {
+            users = repository.findAll(PageRequest.of(page, size)).getContent();
+        } else {
+            users = repository.findByIdIn(ids, PageRequest.of(page, size)).getContent();
+        }
         log.info("get users: {} serviceAdmin", users.size());
         return UsersMapper.toUsersDto(users);
     }

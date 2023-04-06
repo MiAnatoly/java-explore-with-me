@@ -19,6 +19,7 @@ import ru.practicum.ewmservice.exception.ConflictObjectException;
 import ru.practicum.ewmservice.exception.NotObjectException;
 import ru.practicum.ewmservice.joint.events.JointEvents;
 import ru.practicum.ewmservice.mapper.EventsMapper;
+import ru.practicum.ewmservice.mapper.LocationMapper;
 import ru.practicum.ewmservice.mapper.RequestsMapper;
 import ru.practicum.ewmservice.model.categories.Category;
 import ru.practicum.ewmservice.model.events.Event;
@@ -62,8 +63,9 @@ public class EventsPrivateServiceImpl implements EventsPrivateService {
                 .orElseThrow(() -> new NotObjectException("пользователь не найден, id " + userId));
         Category category = categoriesRepository.findById(newEventDto.getCategory())
                 .orElseThrow(() -> new NotObjectException("категория не найдена, id " + newEventDto.getCategory()));
-        newEventDto.setLocation(locationRepository.save(newEventDto.getLocation()));
-        Event event = EventsMapper.toEvent(user, category, newEventDto);
+        Location location = LocationMapper.toLocation(newEventDto.getLocation());
+        location = locationRepository.save(location);
+        Event event = EventsMapper.toEvent(user, category, location, newEventDto);
         event = eventsRepository.save(event);
         log.info("Post event title {} EventsPrivateService", event.getTitle());
         return EventsMapper.toEventDto(event);
@@ -87,7 +89,7 @@ public class EventsPrivateServiceImpl implements EventsPrivateService {
         Event event = eventsRepository.findByInitiatorAndId(user, eventId)
                 .orElseThrow(() -> new NotObjectException("событие не найдено, id " + eventId));
         if (event.getState().equals(State.CANCELED) || event.getState().equals(State.PENDING)) {
-            setUpdateEventAdmin(event, updateEvent);
+            setUpdateEventUser(event, updateEvent);
             log.info("Patch event title {} EventsPrivateService", event.getTitle());
             return jointEvents.toEventFullDto(event);
         } else {
@@ -124,7 +126,7 @@ public class EventsPrivateServiceImpl implements EventsPrivateService {
         List<Request> requests = requestsRepository.findByEvent(event);
         List<Request> requestsConfirmed = jointEvents.toRequestStatus(requests, Status.CONFIRMED);
         List<Request> requestsRejected = jointEvents.toRequestStatus(requests, Status.REJECTED);
-        if (event.getParticipantLimit() > 0 || event.getRequestModeration()) {
+        if (event.getParticipantLimit() > 0 || event.isRequestModeration()) {
             if (requestsConfirmed.size() > event.getParticipantLimit()) {
                 throw new ConflictObjectException("Привышено количество заявок");
             }
@@ -138,38 +140,7 @@ public class EventsPrivateServiceImpl implements EventsPrivateService {
                 RequestsMapper.toParticipationRequestsDto(requestsRejected));
     }
 
-    private void setUpdateEventAdmin(Event event, UpdateEventUserRequest updateEvent) {
-        if (updateEvent.getAnnotation() != null) {
-            event.setAnnotation(updateEvent.getAnnotation());
-        }
-        if (updateEvent.getCategory() != null) {
-            Category category = categoriesRepository.findById(updateEvent.getCategory())
-                    .orElseThrow(() -> new NotObjectException("категория не найдена, id " + updateEvent.getCategory()));
-            event.setCategory(category);
-        }
-        if (updateEvent.getDescription() != null) {
-            event.setDescription(updateEvent.getDescription());
-        }
-        if (updateEvent.getEventDate() != null) {
-            if (LocalDateTime.now().isBefore(updateEvent.getEventDate())) {
-                event.setEventDate(updateEvent.getEventDate());
-            } else {
-                throw new ConflictObjectException("нельзя изменить дату события на уже наступившую");
-            }
-        }
-        if (updateEvent.getLocation() != null) {
-            Location location = locationRepository.save(updateEvent.getLocation());
-            event.setLocation(location);
-        }
-        if (updateEvent.getPaid() != null) {
-            event.setPaid(updateEvent.getPaid());
-        }
-        if (updateEvent.getParticipantLimit() != null) {
-            event.setParticipantLimit(updateEvent.getParticipantLimit());
-        }
-        if (updateEvent.getRequestModeration() != null) {
-            event.setRequestModeration(updateEvent.getRequestModeration());
-        }
+    private void setUpdateEventUser(Event event, UpdateEventUserRequest updateEvent) {
         if (updateEvent.getStateAction() != null) {
             if (updateEvent.getStateAction().equals(StateActionPrivate.SEND_TO_REVIEW)) {
                 event.setState(State.PENDING);
@@ -178,8 +149,6 @@ public class EventsPrivateServiceImpl implements EventsPrivateService {
                 event.setState(State.CANCELED);
             }
         }
-        if (updateEvent.getTitle() != null) {
-            event.setTitle(updateEvent.getTitle());
-        }
+        jointEvents.setUpdateEvent(event, updateEvent);
     }
 }

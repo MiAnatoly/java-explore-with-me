@@ -56,7 +56,7 @@ public class EventsPrivateController {
     public ResponseEntity<Object> edit(
             @PathVariable Long userId,
             @PathVariable Long eventId,
-            @RequestBody UpdateEventUserRequest updateEvent
+            @Validated @RequestBody UpdateEventUserRequest updateEvent
     ) {
         log.info("Patch userId:{} eventId:{}", userId, eventId);
         return new ResponseEntity<>(service.edit(userId, eventId, updateEvent), HttpStatus.OK);

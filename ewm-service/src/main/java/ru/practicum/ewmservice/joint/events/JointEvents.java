@@ -7,11 +7,19 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+import ru.practicum.ewmservice.dao.categories.CategoriesRepository;
+import ru.practicum.ewmservice.dao.location.LocationRepository;
 import ru.practicum.ewmservice.dao.requests.RequestsRepository;
 import ru.practicum.ewmservice.dto.events.EventFullDto;
 import ru.practicum.ewmservice.dto.events.EventShortDto;
+import ru.practicum.ewmservice.dto.events.UpdateEventRequest;
+import ru.practicum.ewmservice.exception.ConflictObjectException;
+import ru.practicum.ewmservice.exception.NotObjectException;
 import ru.practicum.ewmservice.mapper.EventsMapper;
+import ru.practicum.ewmservice.mapper.LocationMapper;
+import ru.practicum.ewmservice.model.categories.Category;
 import ru.practicum.ewmservice.model.events.Event;
+import ru.practicum.ewmservice.model.location.Location;
 import ru.practicum.ewmservice.model.requests.Request;
 import ru.practicum.ewmservice.status.Status;
 
@@ -26,6 +34,10 @@ import java.util.stream.Collectors;
 public class JointEvents {
     private final RequestsRepository requestsRepository;
     private final WebClientService service;
+
+    private final CategoriesRepository categoriesRepository;
+
+    private final LocationRepository locationRepository;
     private static final String URI = "/events";
     private static final String APP = "ewn-service";
 
@@ -106,5 +118,42 @@ public class JointEvents {
         return events.stream()
                 .map(x -> EventsMapper.toEventShortDto(quantityConfirmedRequests(requests, x),
                         findHits(views, x), x)).collect(Collectors.toList());
+    }
+
+    public void setUpdateEvent(Event event, UpdateEventRequest updateEvent) {
+        if (updateEvent.getAnnotation() != null && !updateEvent.getAnnotation().isBlank()) {
+            event.setAnnotation(updateEvent.getAnnotation());
+        }
+        if (updateEvent.getCategory() != null) {
+            Category category = categoriesRepository.findById(updateEvent.getCategory())
+                    .orElseThrow(() -> new NotObjectException("категория не найдена, id " + updateEvent.getCategory()));
+            event.setCategory(category);
+        }
+        if (updateEvent.getDescription() != null && !updateEvent.getDescription().isBlank()) {
+            event.setDescription(updateEvent.getDescription());
+        }
+        if (updateEvent.getEventDate() != null) {
+            if (LocalDateTime.now().isBefore(updateEvent.getEventDate())) {
+                event.setEventDate(updateEvent.getEventDate());
+            } else {
+                throw new ConflictObjectException("нельзя изменить дату события на уже наступившую");
+            }
+        }
+        if (updateEvent.getLocation() != null) {
+            Location location = locationRepository.save(LocationMapper.toLocation(updateEvent.getLocation()));
+            event.setLocation(location);
+        }
+        if (updateEvent.getPaid() != null) {
+            event.setPaid(updateEvent.getPaid());
+        }
+        if (updateEvent.getParticipantLimit() != null) {
+            event.setParticipantLimit(updateEvent.getParticipantLimit());
+        }
+        if (updateEvent.getRequestModeration() != null) {
+            event.setRequestModeration(updateEvent.getRequestModeration());
+        }
+        if (updateEvent.getTitle() != null && !updateEvent.getTitle().isBlank()) {
+            event.setTitle(updateEvent.getTitle());
+        }
     }
 }

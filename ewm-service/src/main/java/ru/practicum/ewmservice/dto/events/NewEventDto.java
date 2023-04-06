@@ -5,10 +5,13 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import ru.practicum.ewmservice.model.location.Location;
+import org.springframework.beans.factory.annotation.Value;
+import ru.practicum.ewmservice.dto.location.LocationDto;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 @Getter
@@ -17,18 +20,22 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class NewEventDto {
     @NotBlank
+    @Size(min = 20, max = 2000)
     private String annotation;
     @NotNull
     private Long category;
     @NotBlank
+    @Size(min = 20, max = 7000)
     private String description;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime eventDate;
-    @NotNull
-    private Location location;
-    private Boolean paid;
+    @Valid
+    private LocationDto location;
+    @Value("${some.key:false}")
+    private boolean paid;
     private Integer participantLimit;
-    private Boolean requestModeration;
-    @NotBlank
+    @Value("${some.key:true}")
+    private boolean requestModeration;
+    @Size(min = 3, max = 120)
     private String title;
 }

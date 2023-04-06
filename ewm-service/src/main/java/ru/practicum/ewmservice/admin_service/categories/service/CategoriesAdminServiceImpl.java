@@ -2,7 +2,6 @@ package ru.practicum.ewmservice.admin_service.categories.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.ewmservice.dao.categories.CategoriesRepository;
@@ -13,10 +12,8 @@ import ru.practicum.ewmservice.exception.ConflictObjectException;
 import ru.practicum.ewmservice.exception.NotObjectException;
 import ru.practicum.ewmservice.mapper.CategoriesMapper;
 import ru.practicum.ewmservice.model.categories.Category;
-import ru.practicum.ewmservice.model.events.Event;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -37,8 +34,8 @@ public class CategoriesAdminServiceImpl implements CategoriesAdminService {
     @Transactional
     @Override
     public void delete(Long catId, HttpServletRequest request) {
-        List<Event> events = eventsRepository.findByCategory_Id(catId, PageRequest.of(0, 1)).getContent();
-        if (events.isEmpty()) {
+        boolean eventsTrue = eventsRepository.existsByCategory_Id(catId);
+        if (!eventsTrue) {
             categoriesRepository.deleteById(catId);
             log.info("remove category: {} serviceAdmin", catId);
         } else {
@@ -52,7 +49,7 @@ public class CategoriesAdminServiceImpl implements CategoriesAdminService {
         Category categoryNew = CategoriesMapper.toCategory(carId, newCategoryDto);
         Category categoryOld = categoriesRepository.findById(carId)
                 .orElseThrow(() -> new NotObjectException("категория не найдена"));
-            categoryOld.setName(categoryNew.getName());
-            return CategoriesMapper.toCategoryDto(categoryOld);
+        categoryOld.setName(categoryNew.getName());
+        return CategoriesMapper.toCategoryDto(categoryOld);
     }
 }

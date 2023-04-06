@@ -24,7 +24,7 @@ private final UserAdminService service;
 
     @GetMapping
     public ResponseEntity<Object> findAll(
-            @RequestParam List<Long> ids,
+            @RequestParam(required = false) List<Long> ids,
             @RequestParam(defaultValue = "0") @Min(0) Integer from,
             @RequestParam(defaultValue = "10") @Min(1) Integer size
     ) {

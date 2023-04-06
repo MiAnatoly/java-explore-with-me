@@ -20,9 +20,8 @@ import java.time.LocalDateTime;
 public class Request {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID", nullable = false)
+    @Column(nullable = false)
     private Long id;
-    @Column(name = "CREATED")
     private LocalDateTime created;
     @ManyToOne
     @JoinColumn(name = "EVENT_ID")
@@ -31,6 +30,5 @@ public class Request {
     @JoinColumn(name = "REQUESTER_ID")
     private User requester;
     @Enumerated(EnumType.STRING)
-    @Column(name = "STATUS")
     private Status status;
 }

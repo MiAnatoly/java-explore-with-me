@@ -4,7 +4,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import ru.practicum.ewmservice.model.compilations.Compilation;
 import ru.practicum.ewmservice.model.events.Event;
 import ru.practicum.ewmservice.model.user.User;
 import ru.practicum.ewmservice.status.State;
@@ -14,7 +13,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface EventsRepository extends JpaRepository<Event, Long> {
-    Page<Event> findByCategory_Id(Long id, Pageable pageable);
+
+    Boolean existsByCategory_Id(Long id);
 
     Page<Event> findByInitiator(User initiator, Pageable pageable);
 
@@ -23,10 +23,6 @@ public interface EventsRepository extends JpaRepository<Event, Long> {
     List<Event> findByIdIn(List<Long> eventsId);
 
     Optional<Event> findByInitiatorAndId(User initiator, Long eventId);
-
-    List<Event> findByCompilationIn(List<Compilation> compilations);
-
-    List<Event> findByCompilation_Id(Long id);
 
     @Query("select e from Event e where (e.category.id is null or (e.category.id in ?2)) " +
             "and e.paid = ?3 and (e.createdOn between ?4 and ?5)" +

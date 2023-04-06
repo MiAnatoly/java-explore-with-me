@@ -9,6 +9,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.ewmservice.admin_service.compilations.service.CompilationsAdminService;
 import ru.practicum.ewmservice.dto.compilation.NewCompilationDto;
+import ru.practicum.ewmservice.dto.compilation.UpdateCompilationRequest;
 
 @Controller
 @RequestMapping("/admin/compilations")
@@ -37,7 +38,7 @@ public class CompilationsAdminController {
     @PatchMapping("/{compId}")
     public ResponseEntity<Object> edit(
             @PathVariable Long compId,
-            @RequestBody NewCompilationDto compilation
+            @Validated @RequestBody UpdateCompilationRequest compilation
     ) {
         log.info("Edit compilation");
         return new ResponseEntity<>(service.edit(compId, compilation), HttpStatus.OK);
