@@ -18,7 +18,6 @@ public class EventsMapper {
             newEventDto.setParticipantLimit(0);
         }
         return new Event(
-                null,
                 newEventDto.getAnnotation(),
                 category,
                 LocalDateTime.now(),
@@ -32,7 +31,8 @@ public class EventsMapper {
                 newEventDto.isRequestModeration(),
                 State.PENDING,
                 newEventDto.getTitle(),
-                null
+                null,
+                false
         );
     }
 

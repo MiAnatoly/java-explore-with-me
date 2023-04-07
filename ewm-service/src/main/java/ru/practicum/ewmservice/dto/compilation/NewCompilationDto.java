@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Value;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -16,7 +15,6 @@ import java.util.List;
 @AllArgsConstructor
 public class NewCompilationDto {
     private List<Long> events;
-    @Value("${some.key:false}")
     private boolean pinned;
     @NotBlank
     @Size(max = 400)

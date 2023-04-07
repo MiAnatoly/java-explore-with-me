@@ -10,7 +10,6 @@ import ru.practicum.ewmservice.dto.location.LocationDto;
 import ru.practicum.ewmservice.dto.users.UserShortDto;
 import ru.practicum.ewmservice.status.State;
 
-import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDateTime;
 
 @Getter
@@ -27,7 +26,6 @@ public class EventDto {
     private LocalDateTime eventDate;
     private UserShortDto initiator;
     private String description;
-    @PositiveOrZero
     private Integer participantLimit;
     private State state;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")

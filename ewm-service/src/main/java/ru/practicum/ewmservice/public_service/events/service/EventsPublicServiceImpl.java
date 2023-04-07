@@ -1,5 +1,6 @@
 package ru.practicum.ewmservice.public_service.events.service;
 
+import com.querydsl.core.types.Predicate;
 import dto.ViewStats;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -8,16 +9,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.ewmservice.dao.events.EventsRepository;
 import ru.practicum.ewmservice.dao.requests.RequestsRepository;
+import ru.practicum.ewmservice.dto.events.EventSearch;
 import ru.practicum.ewmservice.dto.events.EventFullDto;
 import ru.practicum.ewmservice.exception.NotObjectException;
 import ru.practicum.ewmservice.joint.events.JointEvents;
+import ru.practicum.ewmservice.model.QPredicates;
 import ru.practicum.ewmservice.model.events.Event;
+import ru.practicum.ewmservice.model.events.QEvent;
 import ru.practicum.ewmservice.model.requests.Request;
 import ru.practicum.ewmservice.status.Sort;
 import ru.practicum.ewmservice.status.Status;
 
 import javax.servlet.http.HttpServletRequest;
-import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 
@@ -32,41 +35,38 @@ public class EventsPublicServiceImpl implements EventsPublicService {
 
     @Transactional
     @Override
-    public List<EventFullDto> search(String text, List<Long> categories, Boolean paid, LocalDateTime rangeStart,
-                                     LocalDateTime rangeEnd, Boolean onlyAvailable, String sort, Integer page,
+    public List<EventFullDto> search(EventSearch filter, Integer page,
                                      Integer size, HttpServletRequest request) {
-        List<Event> events;
-        List<ViewStats> views;
-        if (rangeStart == null || rangeEnd == null) {
-            if (paid != null) {
-                events = eventsRepository.searchWithoutDate(text, categories, paid,
-                        PageRequest.of(page, size)).getContent();
-            } else {
-                events = eventsRepository.searchWithoutDate(text, categories,
-                        PageRequest.of(page, size)).getContent();
-            }
-            views = jointEvents.findViewStats(events, true);
-        } else {
-            if (paid != null) {
-                events = eventsRepository.search(text, categories, paid, rangeStart,
-                        rangeEnd, PageRequest.of(page, size)).getContent();
-            } else {
-                events = eventsRepository.search(text, categories, rangeStart,
-                        rangeEnd, PageRequest.of(page, size)).getContent();
-            }
-
-            views = jointEvents.findViewStatsWeb(rangeStart, rangeEnd, events, true);
+        Boolean onlyAvailable = null;
+        if (filter.isOnlyAvailable()) {
+            onlyAvailable = false;
         }
+        Predicate predicateText = QPredicates.builder()
+                .add(filter.getText(), QEvent.event.annotation::likeIgnoreCase)
+                .add(filter.getText(), QEvent.event.description::likeIgnoreCase)
+                .buildOr();
+        Predicate predicate = QPredicates.builder()
+                .add(predicateText)
+                .add(filter.getCategories(), QEvent.event.category.id::in)
+                .add(filter.getPaid(), QEvent.event.paid::eq)
+                .add(filter.getRangeStart(), QEvent.event.eventDate::after)
+                .add(filter.getRangeEnd(), QEvent.event.eventDate::before)
+                .add(onlyAvailable, QEvent.event.isNotAvailable::eq)
+                .buildAnd();
+
+        List<Event> events = eventsRepository.findAll(predicate, PageRequest.of(page, size)).getContent();
+        List<ViewStats> views = jointEvents.findViewStats(events, true);
+
         List<Request> requests = requestsRepository.findByEventInAndStatus(events, Status.PENDING);
         jointEvents.addHitWeb(request);
         log.info("Get events count {} EventsPublicService", events.size());
         List<EventFullDto> sortEvents = jointEvents.toEventsFullDto(events, views, requests);
-        if (sort == null) {
+        if (filter.getSort() == null) {
             return sortEvents;
         }
-        if (sort.equals(Sort.EVENT_DATE.toString())) {
+        if (filter.getSort().equals(Sort.EVENT_DATE.toString())) {
             sortEvents.sort(Comparator.comparing(EventFullDto::getEventDate));
-        } else if (sort.equals(Sort.VIEWS.toString())) {
+        } else if (filter.getSort().equals(Sort.VIEWS.toString())) {
             sortEvents.sort(Comparator.comparing(EventFullDto::getViews));
         }
         return sortEvents;

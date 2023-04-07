@@ -56,6 +56,7 @@ public class RequestsPrivateServiceImpl implements RequestsPrivateService {
             List<Request> requests = requestsRepository
                     .findByEventAndStatusIn(event, List.of(Status.CONFIRMED));
             if (requests.size() >= event.getParticipantLimit()) {
+                event.setNotAvailable(true);
                 throw new ConflictObjectException("достигнут лимит запросов");
             }
             if (event.isRequestModeration()) {

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import ru.practicum.ewmservice.dto.events.EventSearch;
 import ru.practicum.ewmservice.exception.ConflictObjectException;
 import ru.practicum.ewmservice.public_service.events.service.EventsPublicService;
 import ru.practicum.ewmservice.valide.ValidPage;
@@ -46,9 +47,9 @@ public class EventsPublicController {
                 throw new ConflictObjectException("end дата раньше start даты");
             }
         }
+        EventSearch filter = new EventSearch(text, categories, paid, rangeStart, rangeEnd, onlyAvailable, sort);
         log.info("Get search");
-        return new ResponseEntity<>(service.search(text, categories, paid, rangeStart, rangeEnd, onlyAvailable,
-                        sort, page, size, request), HttpStatus.OK);
+        return new ResponseEntity<>(service.search(filter, page, size, request), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")

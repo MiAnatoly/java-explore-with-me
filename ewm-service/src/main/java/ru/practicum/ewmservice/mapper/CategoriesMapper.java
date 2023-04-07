@@ -14,14 +14,6 @@ public class CategoriesMapper {
 
     public static Category toCategory(NewCategoryDto category) {
         return new Category(
-                null,
-                category.getName()
-        );
-    }
-
-    public static Category toCategory(Long id, NewCategoryDto category) {
-        return new Category(
-                id,
                 category.getName()
         );
     }

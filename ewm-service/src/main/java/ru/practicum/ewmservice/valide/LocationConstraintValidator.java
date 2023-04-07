@@ -19,7 +19,7 @@ public class LocationConstraintValidator implements ConstraintValidator<Location
     @Override
     public boolean isValid(Float loc, ConstraintValidatorContext context) {
         if (loc == null) {
-            return true;
+            return false;
         }
         return loc > min && loc < max;
     }

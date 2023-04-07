@@ -1,9 +1,6 @@
 package ru.practicum.ewmservice.model.events;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import ru.practicum.ewmservice.model.categories.Category;
 import ru.practicum.ewmservice.model.compilations.Compilation;
 import ru.practicum.ewmservice.model.location.Location;
@@ -21,11 +18,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "EVENTS")
-public class Event {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "EVENT_ID", nullable = false)
-    private Long id;
+public class Event extends AbstractEntity {
     private String annotation;
     @ManyToOne
     @JoinColumn(name = "CATEGORY_ID")
@@ -53,5 +46,9 @@ public class Event {
     private State state;
     private String title;
     @ManyToMany(mappedBy = "events")
+    @ToString.Exclude
     private List<Compilation> compilations;
+    @Column(name = "NOT_AVAILABLE")
+    private boolean isNotAvailable;
+
 }

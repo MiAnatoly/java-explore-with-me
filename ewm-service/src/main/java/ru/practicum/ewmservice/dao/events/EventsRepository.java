@@ -2,9 +2,9 @@ package ru.practicum.ewmservice.dao.events;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import ru.practicum.ewmservice.model.events.Event;
+import ru.practicum.ewmservice.model.events.QEvent;
 import ru.practicum.ewmservice.model.user.User;
 import ru.practicum.ewmservice.status.State;
 
@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-public interface EventsRepository extends JpaRepository<Event, Long> {
+public interface EventsRepository extends EventCustomRepository<Event, QEvent, Long> {
 
     Boolean existsByCategory_Id(Long id);
 
@@ -20,33 +20,11 @@ public interface EventsRepository extends JpaRepository<Event, Long> {
 
     List<Event> findByIdInAndState(List<Long> eventsId, State state);
 
+    Optional<Event> findByIdAndState(Long eventsId, State state);
+
     List<Event> findByIdIn(List<Long> eventsId);
 
     Optional<Event> findByInitiatorAndId(User initiator, Long eventId);
-
-    @Query("select e from Event e where (e.category.id is null or (e.category.id in ?2)) " +
-            "and e.paid = ?3 and (e.createdOn between ?4 and ?5)" +
-            "and (upper(e.annotation) like upper(concat('%', ?1, '%')) " +
-            "or upper(e.description) like upper(concat('%', ?1, '%')))")
-    Page<Event> search(String text, List<Long> categories, Boolean paid, LocalDateTime rangeStart,
-                       LocalDateTime rangeEnd, Pageable pageable);
-
-    @Query("select e from Event e where (e.category.id is null or (e.category.id in ?2)) " +
-            "and (e.createdOn between ?3 and ?4)" +
-            "and (upper(e.annotation) like upper(concat('%', ?1, '%')) " +
-            "or upper(e.description) like upper(concat('%', ?1, '%')))")
-    Page<Event> search(String text, List<Long> categories, LocalDateTime rangeStart,
-                       LocalDateTime rangeEnd, Pageable pageable);
-
-    @Query("select e from Event e where (e.category.id is null or (e.category.id in ?2)) " +
-            "and e.paid = ?3 and (upper(e.annotation) like upper(concat('%', ?1, '%')) " +
-            "or upper(e.description) like upper(concat('%', ?1, '%')))")
-    Page<Event> searchWithoutDate(String text, List<Long> categories, Boolean paid, Pageable pageable);
-
-    @Query("select e from Event e where (e.category.id is null or (e.category.id in ?2)) " +
-            "and (upper(e.annotation) like upper(concat('%', ?1, '%')) " +
-            "or upper(e.description) like upper(concat('%', ?1, '%')))")
-    Page<Event> searchWithoutDate(String text, List<Long> categories, Pageable pageable);
 
     @Query("select e from Event e where (e.initiator.id is null or (e.initiator.id in ?1)) and e.state in ?2" +
             " and (e.category.id is null or (e.category.id in ?3))")
@@ -65,5 +43,4 @@ public interface EventsRepository extends JpaRepository<Event, Long> {
             " and (e.category.id is null or (e.category.id in ?2)) and e.createdOn between ?3 and ?4")
     Page<Event> searchAdminWithDateAllState(List<Long> users, List<Long> categories,
                                      LocalDateTime rangeStart, LocalDateTime rangeEnd, Pageable pageable);
-
 }

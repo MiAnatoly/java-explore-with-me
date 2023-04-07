@@ -26,6 +26,7 @@ import ru.practicum.ewmservice.status.Status;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Component
@@ -72,15 +73,6 @@ public class JointEvents {
         log.info("save static hit{}", statusAdd);
     }
 
-    public List<ViewStats> findViewStatsWeb(LocalDateTime start, LocalDateTime end, List<Event> events, Boolean unique) {
-        if (events.isEmpty()) {
-            return List.of();
-        }
-        List<String> uris = events.stream().map(x -> URI + "/" + x.getId()).collect(Collectors.toList());
-        return service.find(start,
-                end, uris, true);
-    }
-
     public Long quantityConfirmedRequests(List<Request> requests, Event event) {
         return requests.stream().filter(x -> x.getEvent().equals(event)).count();
     }
@@ -109,9 +101,13 @@ public class JointEvents {
     }
 
     public List<EventFullDto> toEventsFullDto(List<Event> events, List<ViewStats> views, List<Request> requests) {
+        Map<Long, Long> viewByEvent = views.stream()
+                .collect(Collectors.toMap(stat -> split(stat.getUri()), ViewStats::getHits));
+        Map<Long, Long> requestsByEvent = requests.stream()
+                .collect(Collectors.groupingBy(r -> r.getEvent().getId(), Collectors.counting()));
         return events.stream()
-                .map(x -> EventsMapper.toEventFullDto(x, quantityConfirmedRequests(requests, x),
-                        findHits(views, x))).collect(Collectors.toList());
+                .map(x -> EventsMapper.toEventFullDto(x, viewByEvent.get(x.getId()),
+                        requestsByEvent.get(x.getId()))).collect(Collectors.toList());
     }
 
     public List<EventShortDto> toEventsShortDto(List<Event> events, List<ViewStats> views, List<Request> requests) {

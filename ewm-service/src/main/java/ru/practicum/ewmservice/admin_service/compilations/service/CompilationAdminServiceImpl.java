@@ -37,7 +37,7 @@ public class CompilationAdminServiceImpl implements CompilationsAdminService {
     @Override
     public CompilationDto add(NewCompilationDto newCompilationDto) {
         Compilation compilation;
-        if (newCompilationDto.getEvents().isEmpty()) {
+        if (newCompilationDto.getEvents() == null || newCompilationDto.getEvents().isEmpty()) {
             compilation = CompilationMapper.toCompilation(newCompilationDto, List.of());
             compilationRepository.save(compilation);
             log.info("Post compilation count events CompilationAdminService");
@@ -65,9 +65,11 @@ public class CompilationAdminServiceImpl implements CompilationsAdminService {
     public CompilationDto edit(Long compId, UpdateCompilationRequest updateCompilationDto) {
         Compilation compilation = compilationRepository.findById(compId)
                 .orElseThrow(() -> new NotObjectException("not compilation"));
-        List<Event> eventsOld = compilation.getEvents();
-        log.info("list {}", eventsOld);
-        List<Event> events = eventsRepository.findByIdInAndState(updateCompilationDto.getEvents(), State.PUBLISHED);
+        List<Event> events = compilation.getEvents();
+        log.info("list {}", events);
+        if (updateCompilationDto.getEvents() != null) {
+            events = eventsRepository.findByIdInAndState(updateCompilationDto.getEvents(), State.PUBLISHED);
+        }
         setUpdateCompilation(compilation, updateCompilationDto, events);
         List<ViewStats> views = jointEvents.findViewStats(events, true);
         List<Request> requests = requestsRepository.findByEventInAndStatus(events, Status.PENDING);
@@ -79,7 +81,9 @@ public class CompilationAdminServiceImpl implements CompilationsAdminService {
     private void setUpdateCompilation(Compilation compilation,
                                       UpdateCompilationRequest updateCompilationDto, List<Event> events) {
         compilation.setEvents(events);
-            compilation.setPinned(updateCompilationDto.isPinned());
+        if (updateCompilationDto.getPinned() != null) {
+            compilation.setPinned(updateCompilationDto.getPinned());
+        }
         if (updateCompilationDto.getTitle() != null && updateCompilationDto.getTitle().isBlank()) {
             compilation.setTitle(updateCompilationDto.getTitle());
         }
