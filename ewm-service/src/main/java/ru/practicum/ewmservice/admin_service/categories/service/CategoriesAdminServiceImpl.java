@@ -46,7 +46,7 @@ public class CategoriesAdminServiceImpl implements CategoriesAdminService {
     @Transactional
     @Override
     public CategoryDto edit(Long carId, NewCategoryDto newCategoryDto, HttpServletRequest request) {
-        Category categoryNew = CategoriesMapper.toCategory(carId, newCategoryDto);
+        Category categoryNew = CategoriesMapper.toCategory(newCategoryDto);
         Category categoryOld = categoriesRepository.findById(carId)
                 .orElseThrow(() -> new NotObjectException("категория не найдена"));
         categoryOld.setName(categoryNew.getName());
