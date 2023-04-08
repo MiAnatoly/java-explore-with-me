@@ -30,7 +30,7 @@ public class EventsPublicController {
 
     @GetMapping
     public ResponseEntity<Object> search(
-            @RequestParam(defaultValue = "") String text,
+            @RequestParam(required = false) String text,
             @RequestParam(required = false) List<Long> categories,
             @RequestParam(required = false) Boolean paid,
             @RequestParam(required = false) LocalDateTime rangeStart,

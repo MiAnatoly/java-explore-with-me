@@ -54,7 +54,12 @@ public class EventsPublicServiceImpl implements EventsPublicService {
                 .add(onlyAvailable, QEvent.event.isNotAvailable::eq)
                 .buildAnd();
 
-        List<Event> events = eventsRepository.findAll(predicate, PageRequest.of(page, size)).getContent();
+        List<Event> events;
+        if (predicate == null) {
+            events = eventsRepository.findAll(PageRequest.of(page, size)).getContent();
+        } else {
+            events = eventsRepository.findAll(predicate, PageRequest.of(page, size)).getContent();
+        }
         List<ViewStats> views = jointEvents.findViewStats(events, true);
 
         List<Request> requests = requestsRepository.findByEventInAndStatus(events, Status.PENDING);

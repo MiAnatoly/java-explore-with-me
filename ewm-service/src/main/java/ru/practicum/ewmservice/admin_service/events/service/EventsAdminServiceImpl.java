@@ -1,5 +1,6 @@
 package ru.practicum.ewmservice.admin_service.events.service;
 
+import com.querydsl.core.types.Predicate;
 import dto.ViewStats;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +14,9 @@ import ru.practicum.ewmservice.dto.events.UpdateEventAdminRequest;
 import ru.practicum.ewmservice.exception.ConflictObjectException;
 import ru.practicum.ewmservice.exception.NotObjectException;
 import ru.practicum.ewmservice.joint.events.JointEvents;
+import ru.practicum.ewmservice.model.QPredicates;
 import ru.practicum.ewmservice.model.events.Event;
+import ru.practicum.ewmservice.model.events.QEvent;
 import ru.practicum.ewmservice.model.requests.Request;
 import ru.practicum.ewmservice.status.State;
 import ru.practicum.ewmservice.status.StateActionAdmin;
@@ -37,26 +40,22 @@ public class EventsAdminServiceImpl implements EventsAdminService {
         List<Event> events;
         List<ViewStats> views;
         List<Request> requests;
-        if (rangeStart == null || rangeEnd == null) {
-            if (eventStates == null) {
-                events = eventsRepository.searchAdminAllState(
-                        users, categories, PageRequest.of(page, size)).getContent();
-            } else {
-                events = eventsRepository.searchAdmin(
-                        users, eventStates, categories, PageRequest.of(page, size)).getContent();
-            }
-                    views = jointEvents.findViewStats(events, true);
-        } else {
-            if (eventStates == null) {
-                events = eventsRepository.searchAdminWithDateAllState(
-                        users, categories, rangeStart, rangeEnd, PageRequest.of(page, size)).getContent();
-            } else {
-                events = eventsRepository.searchAdminWithDate(
-                        users, eventStates, categories, rangeStart, rangeEnd, PageRequest.of(page, size)).getContent();
-            }
 
-                    views = jointEvents.findViewStats(rangeStart, rangeEnd, events, true);
+        Predicate predicate = QPredicates.builder()
+                .add(users, QEvent.event.initiator.id::in)
+                .add(eventStates, QEvent.event.state::in)
+                .add(categories, QEvent.event.category.id::in)
+                .add(rangeStart, QEvent.event.eventDate::after)
+                .add(rangeEnd, QEvent.event.eventDate::before)
+                .buildAnd();
+
+        if (predicate == null) {
+            events = eventsRepository.findAll(PageRequest.of(page, size)).getContent();
+        } else {
+            events = eventsRepository.findAll(predicate, PageRequest.of(page, size)).getContent();
         }
+        views = jointEvents.findViewStats(events, true);
+
         if (events.isEmpty()) {
             requests = List.of();
         } else {
