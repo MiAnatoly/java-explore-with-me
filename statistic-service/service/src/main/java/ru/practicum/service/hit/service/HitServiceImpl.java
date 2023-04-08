@@ -31,16 +31,32 @@ public class HitServiceImpl implements HitService {
     @Override
     public List<ViewStats> find(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
         if (unique) { // уникальный пользователь
-            if (uris == null) {
-                return hitRepository.findUniqueTrueWithoutUris(start, end);
+           if (uris == null) {
+                if (start == null || end == null) {
+                    return hitRepository.findUniqueTrueWithoutParam();
+                } else {
+                    return hitRepository.findUniqueTrueWithoutUris(start, end);
+                }
             } else {
-                return hitRepository.findUniqueTrue(start, end, uris);
+                if (start == null || end == null) {
+                    return hitRepository.findUniqueTrueWithoutDate(uris);
+                } else {
+                    return hitRepository.findUniqueTrue(start, end, uris);
+                }
             }
         } else {
             if (uris == null) {
-                return hitRepository.findUniqueFalseWithoutUris(start, end);
+                if (start == null || end == null) {
+                    return hitRepository.findUniqueFalseWithoutParam();
+                } else {
+                    return hitRepository.findUniqueFalseWithoutUris(start, end);
+                }
             } else {
-                return hitRepository.findUniqueFalse(start, end, uris);
+                if (start == null || end == null) {
+                    return hitRepository.findUniqueFalseWithoutDate(uris);
+                } else {
+                    return hitRepository.findUniqueFalse(start, end, uris);
+                }
             }
         }
     }
