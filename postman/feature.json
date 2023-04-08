@@ -16,7 +16,7 @@
               "listen": "test",
               "script": {
                 "exec": [
-                  "pm.globals.set(\"userId1\", pm.response.json.id)\r",
+                  "\r",
                   "\r",
                   "pm.test(\"Status code is 200 or 201\", function () {\r",
                   "    pm.expect(pm.response.code).to.be.oneOf([200,201]);\r",
@@ -28,6 +28,7 @@
                   "pm.test(\"Test user 'id' field\", function () {\r",
                   "    var jsonData = pm.response.json();\r",
                   "    pm.expect(jsonData).to.have.property('id');\r",
+                  "    pm.globals.set(\"userId1\", jsonData.id);\r",
                   "});\r",
                   "pm.test(\"Test user 'email' field\", function () {\r",
                   "    var jsonData = pm.response.json();\r",
@@ -108,8 +109,6 @@
               "listen": "test",
               "script": {
                 "exec": [
-                  "pm.globals.set(\"userId2\", pm.response.json.id)\r",
-                  "\r",
                   "pm.test(\"Status code is 200 or 201\", function () {\r",
                   "    pm.expect(pm.response.code).to.be.oneOf([200,201]);\r",
                   "});\r",
@@ -120,6 +119,7 @@
                   "pm.test(\"Test user 'id' field\", function () {\r",
                   "    var jsonData = pm.response.json();\r",
                   "    pm.expect(jsonData).to.have.property('id');\r",
+                  "    pm.globals.set(\"userId2\", jsonData.id);\r",
                   "});\r",
                   "pm.test(\"Test user 'description' email\", function () {\r",
                   "    var jsonData = pm.response.json();\r",
@@ -190,7 +190,6 @@
               "listen": "test",
               "script": {
                 "exec": [
-                  "pm.globals.set(\"userId3\", pm.response.json.id)\r",
                   "\r",
                   "pm.test(\"Status code is 200 or 201\", function () {\r",
                   "    pm.expect(pm.response.code).to.be.oneOf([200,201]);\r",
@@ -202,6 +201,7 @@
                   "pm.test(\"Test user 'id' field\", function () {\r",
                   "    var jsonData = pm.response.json();\r",
                   "    pm.expect(jsonData).to.have.property('id');\r",
+                  "    pm.globals.set(\"userId3\", jsonData.id);\r",
                   "});\r",
                   "pm.test(\"Test user 'email' field\", function () {\r",
                   "    var jsonData = pm.response.json();\r",
@@ -272,8 +272,6 @@
               "listen": "test",
               "script": {
                 "exec": [
-                  "pm.globals.set(\"categoryId1\", pm.response.json.id)\r",
-                  "\r",
                   "pm.test(\"Status code is 200 or 201\", function () {\r",
                   "    pm.expect(pm.response.code).to.be.oneOf([200,201]);\r",
                   "});\r",
@@ -284,6 +282,7 @@
                   "pm.test(\"Test category 'id' field\", function () {\r",
                   "    var jsonData = pm.response.json();\r",
                   "    pm.expect(jsonData).to.have.property('id');\r",
+                  "    pm.globals.set(\"categoryId1\", jsonData.id);\r",
                   "});\r",
                   "pm.test(\"Test category 'name' field\", function () {\r",
                   "    var jsonData = pm.response.json();\r",
@@ -349,7 +348,6 @@
               "listen": "test",
               "script": {
                 "exec": [
-                  "pm.globals.set(\"eventId1\", pm.response.json.id)\r",
                   "\r",
                   "pm.test(\"Status code is 200 or 201\", function () {\r",
                   "    pm.expect(pm.response.code).to.be.oneOf([200,201]);\r",
@@ -365,6 +363,7 @@
                   "pm.test(\"Test comment 'id' field\", function () {\r",
                   "    var jsonData = pm.response.json();\r",
                   "    pm.expect(jsonData).to.have.property('id');\r",
+                  "    pm.globals.set(\"eventId1\", jsonData.id);\r",
                   "});\r",
                   "pm.test(\"Test event 'title' field\", function () {\r",
                   "    var jsonData = pm.response.json();\r",
@@ -434,7 +433,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n\"annotation\": \"Сплав на байдарках похож на полет.\",\n\"category\": 1,\n\"description\": \"Сплав на байдарках похож на полет. На спокойной воде — это парение. На бу\",\n\"eventDate\": \"2024-12-31 15:10:05\",\n\"location\": {\n\"lat\": 55.754167,\n\"lon\": 37.62\n},\n\"paid\": true,\n\"participantLimit\": 10,\n\"requestModeration\": false,\n\"title\": \"Сплав на байдарках\"\n}",
+              "raw": "{\n\"annotation\": \"Сплав на байдарках похож на полет.\",\n\"category\": {{categoryId1}},\n\"description\": \"Сплав на байдарках похож на полет. На спокойной воде — это парение. На бу\",\n\"eventDate\": \"2024-12-31 15:10:05\",\n\"location\": {\n\"lat\": 55.754167,\n\"lon\": 37.62\n},\n\"paid\": true,\n\"participantLimit\": 10,\n\"requestModeration\": false,\n\"title\": \"Сплав на байдарках\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -466,7 +465,7 @@
               "variable": [
                 {
                   "key": "userId",
-                  "value": "1"
+                  "value": "{{userId1}}"
                 }
               ]
             }
@@ -480,8 +479,6 @@
               "listen": "test",
               "script": {
                 "exec": [
-                  "pm.globals.set(\"eventId2\", pm.response.json.id)\r",
-                  "\r",
                   "pm.test(\"Status code is 200 or 201\", function () {\r",
                   "    pm.expect(pm.response.code).to.be.oneOf([200,201]);\r",
                   "});\r",
@@ -496,6 +493,7 @@
                   "pm.test(\"Test comment 'id' field\", function () {\r",
                   "    var jsonData = pm.response.json();\r",
                   "    pm.expect(jsonData).to.have.property('id');\r",
+                  "    pm.globals.set(\"eventId2\", jsonData.id);\r",
                   "});\r",
                   "pm.test(\"Test event 'title' field\", function () {\r",
                   "    var jsonData = pm.response.json();\r",
@@ -564,7 +562,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n\"annotation\": \"поход на гору аю-даг.\",\n\"category\": 1,\n\"description\": \"Поход в гору через северо-западную со стороны военного санатория\",\n\"eventDate\": \"2023-12-31 15:10:05\",\n\"location\": {\n\"lat\": 58.754167,\n\"lon\": 39.62\n},\n\"paid\": true,\n\"participantLimit\": 10,\n\"requestModeration\": false,\n\"title\": \"поход в горы\"\n}",
+              "raw": "{\n\"annotation\": \"поход на гору аю-даг.\",\n\"category\": {{categoryId1}},\n\"description\": \"Поход в гору через северо-западную со стороны военного санатория\",\n\"eventDate\": \"2023-12-31 15:10:05\",\n\"location\": {\n\"lat\": 58.754167,\n\"lon\": 39.62\n},\n\"paid\": true,\n\"participantLimit\": 10,\n\"requestModeration\": false,\n\"title\": \"поход в горы\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -596,7 +594,7 @@
               "variable": [
                 {
                   "key": "userId",
-                  "value": "2"
+                  "value": "{{userId2}}"
                 }
               ]
             }
@@ -633,7 +631,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"description\": \"user1 descr по самой широкой дороге шел высокий человек\",\n  \"eventId\": 1\n}",
+              "raw": "{\n  \"description\": \"user1 descr по самой широкой дороге шел высокий человек\",\n  \"eventId\": {{eventId1}}\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -665,7 +663,7 @@
               "variable": [
                 {
                   "key": "userId",
-                  "value": "1"
+                  "value": "{{userId1}}"
                 }
               ]
             }
@@ -796,7 +794,7 @@
               "variable": [
                 {
                   "key": "eventId",
-                  "value": "1"
+                  "value": "{{eventId1}}"
                 }
               ]
             }
@@ -810,7 +808,6 @@
               "listen": "test",
               "script": {
                 "exec": [
-                  "pm.globals.set(\"commentId1\", pm.response.json.id)\r",
                   "\r",
                   "pm.test(\"Status code is 200 or 201\", function () {\r",
                   "    pm.expect(pm.response.code).to.be.oneOf([200,201]);\r",
@@ -822,6 +819,7 @@
                   "pm.test(\"Test user 'id' field\", function () {\r",
                   "    var jsonData = pm.response.json();\r",
                   "    pm.expect(jsonData).to.have.property('id');\r",
+                  "    pm.globals.set(\"commentId1\", jsonData.id);\r",
                   "});\r",
                   "pm.test(\"Test user 'description' field\", function () {\r",
                   "    var jsonData = pm.response.json();\r",
@@ -856,7 +854,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"description\": \"user1 descr по самой широкой дороге шел высокий человек\",\n  \"eventId\": 1\n}",
+              "raw": "{\n  \"description\": \"user1 descr по самой широкой дороге шел высокий человек\",\n  \"eventId\": {{eventId1}}\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -888,7 +886,7 @@
               "variable": [
                 {
                   "key": "userId",
-                  "value": "1"
+                  "value": "{{userId1}}"
                 }
               ]
             }
@@ -1019,7 +1017,7 @@
               "variable": [
                 {
                   "key": "eventId",
-                  "value": "2"
+                  "value": "{{eventId2}}"
                 }
               ]
             }
@@ -1033,7 +1031,6 @@
               "listen": "test",
               "script": {
                 "exec": [
-                  "pm.globals.set(\"commentId2\", pm.response.json.id)\r",
                   "\r",
                   "pm.test(\"Status code is 200 or 201\", function () {\r",
                   "    pm.expect(pm.response.code).to.be.oneOf([200,201]);\r",
@@ -1045,6 +1042,7 @@
                   "pm.test(\"Test user 'id' field\", function () {\r",
                   "    var jsonData = pm.response.json();\r",
                   "    pm.expect(jsonData).to.have.property('id');\r",
+                  "    pm.globals.set(\"commentId2\", jsonData.id);\r",
                   "});\r",
                   "pm.test(\"Test user 'description' field\", function () {\r",
                   "    var jsonData = pm.response.json();\r",
@@ -1079,7 +1077,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"description\": \"user1 descr по самой широкой дороге шел высокий человек\",\n  \"eventId\": 2\n}",
+              "raw": "{\n  \"description\": \"user1 descr по самой широкой дороге шел высокий человек\",\n  \"eventId\": {{eventId2}}\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -1111,7 +1109,7 @@
               "variable": [
                 {
                   "key": "userId",
-                  "value": "1"
+                  "value": "{{userId1}}"
                 }
               ]
             }
@@ -1125,7 +1123,6 @@
               "listen": "test",
               "script": {
                 "exec": [
-                  "pm.globals.set(\"commentId1\", pm.response.json.id)\r",
                   "\r",
                   "pm.test(\"Status code is 200 or 201\", function () {\r",
                   "    pm.expect(pm.response.code).to.be.oneOf([200,201]);\r",
@@ -1137,6 +1134,7 @@
                   "pm.test(\"Test user 'id' field\", function () {\r",
                   "    var jsonData = pm.response.json();\r",
                   "    pm.expect(jsonData).to.have.property('id');\r",
+                  "    pm.globals.set(\"commentId3\", jsonData.id);\r",
                   "});\r",
                   "pm.test(\"Test user 'description' field\", function () {\r",
                   "    var jsonData = pm.response.json();\r",
@@ -1171,7 +1169,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"description\": \"user2 descr по самой широкой дороге шел высокий человек\",\n  \"eventId\": 1\n}",
+              "raw": "{\n  \"description\": \"user2 descr по самой широкой дороге шел высокий человек\",\n  \"eventId\": {{eventId1}}\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -1203,7 +1201,7 @@
               "variable": [
                 {
                   "key": "userId",
-                  "value": "2"
+                  "value": "{{userId2}}"
                 }
               ]
             }
@@ -1220,12 +1218,12 @@
                   "pm.test(\"Status code is 200\", function () {",
                   "    pm.expect(pm.response.code).to.be.oneOf([200]);",
                   "});",
-                  "pm.test(\"Test get user\", function () {",
+                  "pm.test(\"Test get comment\", function () {",
                   "    var jsonData = pm.response.json();",
-                  "    pm.expect(jsonData.id, '\"id\" field').to.eql(1);",
+                  "    pm.expect(jsonData).to.have.property('id');",
                   "    pm.expect(jsonData.description, '\"description\" field').to.eql('user1 descr по самой широкой дороге шел высокий человек');",
                   "    pm.expect(jsonData).to.have.property('created');",
-                  "    pm.expect(jsonData.eventId, '\"eventId\" field').to.eql(1);",
+                  "    pm.expect(jsonData).to.have.property('eventId');",
                   "});"
                 ],
                 "type": "text/javascript"
@@ -1255,11 +1253,11 @@
               "variable": [
                 {
                   "key": "userId",
-                  "value": "1"
+                  "value": "{{userId1}}"
                 },
                 {
                   "key": "comId:",
-                  "value": "1"
+                  "value": "{{commentId1}}"
                 }
               ]
             }
@@ -1273,7 +1271,6 @@
               "listen": "test",
               "script": {
                 "exec": [
-                  "pm.globals.set(\"commentId1\", pm.response.json.id)\r",
                   "\r",
                   "pm.test(\"Status code is 200 or 201\", function () {\r",
                   "    pm.expect(pm.response.code).to.be.oneOf([200,201]);\r",
@@ -1285,6 +1282,7 @@
                   "pm.test(\"Test user 'id' field\", function () {\r",
                   "    var jsonData = pm.response.json();\r",
                   "    pm.expect(jsonData).to.have.property('id');\r",
+                  "    pm.globals.set(\"commentId4\", jsonData.id);\r",
                   "});\r",
                   "pm.test(\"Test user 'description' field\", function () {\r",
                   "    var jsonData = pm.response.json();\r",
@@ -1319,7 +1317,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"description\": \"user3 descr по самой широкой дороге шел высокий человек\",\n  \"eventId\": 1\n}",
+              "raw": "{\n  \"description\": \"user3 descr по самой широкой дороге шел высокий человек\",\n  \"eventId\": {{eventId1}}\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -1351,7 +1349,7 @@
               "variable": [
                 {
                   "key": "userId",
-                  "value": "3"
+                  "value": "{{userId3}}"
                 }
               ]
             }
@@ -1371,14 +1369,9 @@
                   "pm.test(\"Test get all event by user\", function () {",
                   "    var jsonData = pm.response.json();",
                   "    pm.expect(jsonData.length, 'event count in total').to.eql(2);",
-                  "",
-                  "    pm.expect(jsonData[0].id, 'result[0]: \"id\" field').to.eql(1);",
                   "    pm.expect(jsonData[0].description, 'result[0]: \"description\" field').to.eql('user1 descr по самой широкой дороге шел высокий человек');",
-                  "     pm.expect(jsonData[0].eventId, 'result[0]: \"eventId\" field').to.eql(1);",
                   "",
-                  "     pm.expect(jsonData[1].id, 'result[1]: \"id\" field').to.eql(2);",
                   "    pm.expect(jsonData[1].description, 'result[1]: \"description\" field').to.eql('user1 descr по самой широкой дороге шел высокий человек');",
-                  "     pm.expect(jsonData[1].eventId, 'result[1]: \"eventId\" field').to.eql(2);",
                   "});"
                 ],
                 "type": "text/javascript"
@@ -1407,7 +1400,7 @@
               "variable": [
                 {
                   "key": "userId",
-                  "value": "1"
+                  "value": "{{userId1}}"
                 }
               ]
             }
@@ -1452,11 +1445,11 @@
               "variable": [
                 {
                   "key": "userId",
-                  "value": "1"
+                  "value": "{{userId1}}"
                 },
                 {
                   "key": "comId:",
-                  "value": "2"
+                  "value": "{{commentId2}}"
                 }
               ]
             }
@@ -1477,9 +1470,7 @@
                   "    var jsonData = pm.response.json();",
                   "    pm.expect(jsonData.length, 'event count in total').to.eql(1);",
                   "",
-                  "    pm.expect(jsonData[0].id, 'result[0]: \"id\" field').to.eql(1);",
                   "    pm.expect(jsonData[0].description, 'result[0]: \"description\" field').to.eql('user1 descr по самой широкой дороге шел высокий человек');",
-                  "     pm.expect(jsonData[0].eventId, 'result[0]: \"eventId\" field').to.eql(1);",
                   "",
                   "});"
                 ],
@@ -1509,7 +1500,7 @@
               "variable": [
                 {
                   "key": "userId",
-                  "value": "1"
+                  "value": "{{userId1}}"
                 }
               ]
             }
@@ -1523,7 +1514,6 @@
               "listen": "test",
               "script": {
                 "exec": [
-                  "pm.globals.set(\"commentId2\", pm.response.json.id)\r",
                   "\r",
                   "pm.test(\"Status code is 200 or 201\", function () {\r",
                   "    pm.expect(pm.response.code).to.be.oneOf([200,201]);\r",
@@ -1535,6 +1525,7 @@
                   "pm.test(\"Test user 'id' field\", function () {\r",
                   "    var jsonData = pm.response.json();\r",
                   "    pm.expect(jsonData).to.have.property('id');\r",
+                  "    pm.globals.set(\"commentId5\", jsonData.id);\r",
                   "});\r",
                   "pm.test(\"Test user 'description' field\", function () {\r",
                   "    var jsonData = pm.response.json();\r",
@@ -1569,7 +1560,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"description\": \"user1 descr по самой широкой дороге шел высокий человек\",\n  \"eventId\": 2\n}",
+              "raw": "{\n  \"description\": \"user1 descr по самой широкой дороге шел высокий человек\",\n  \"eventId\": {{eventId2}}\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -1601,7 +1592,7 @@
               "variable": [
                 {
                   "key": "userId",
-                  "value": "1"
+                  "value": "{{userId1}}"
                 }
               ]
             }
@@ -1622,20 +1613,11 @@
                   "    var jsonData = pm.response.json();",
                   "    pm.expect(jsonData.length, 'event count in total').to.eql(3);",
                   "",
-                  "    pm.expect(jsonData[0].id, 'result[0]: \"id\" field').to.eql(1);",
                   "    pm.expect(jsonData[0].description, 'result[0]: \"description\" field').to.eql('user1 descr по самой широкой дороге шел высокий человек');",
-                  "     pm.expect(jsonData[0].eventId, 'result[0]: \"eventId\" field').to.eql(1);",
-                  "     pm.expect(jsonData[0].requester.id, 'result[0]: \"requester\" field').to.eql(1);",
                   "",
-                  "     pm.expect(jsonData[1].id, 'result[1]: \"id\" field').to.eql(3);",
                   "    pm.expect(jsonData[1].description, 'result[1]: \"description\" field').to.eql('user2 descr по самой широкой дороге шел высокий человек');",
-                  "     pm.expect(jsonData[1].eventId, 'result[1]: \"eventId\" field').to.eql(1);",
-                  "     pm.expect(jsonData[1].requester.id, 'result[1]: \"requester\" field').to.eql(2);",
                   "",
-                  "      pm.expect(jsonData[2].id, 'result[2]: \"id\" field').to.eql(4);",
                   "    pm.expect(jsonData[2].description, 'result[2]: \"description\" field').to.eql('user3 descr по самой широкой дороге шел высокий человек');",
-                  "     pm.expect(jsonData[2].eventId, 'result[2]: \"eventId\" field').to.eql(1);",
-                  "     pm.expect(jsonData[2].requester.id, 'result[2]: \"requester\" field').to.eql(3);",
                   "});"
                 ],
                 "type": "text/javascript"
@@ -1664,7 +1646,7 @@
               "variable": [
                 {
                   "key": "eventId",
-                  "value": "1"
+                  "value": "{{eventId1}}"
                 }
               ]
             }
@@ -1708,7 +1690,7 @@
               "variable": [
                 {
                   "key": "comId:",
-                  "value": "4"
+                  "value": "{{commentId4}}"
                 }
               ]
             }
@@ -1729,16 +1711,9 @@
                   "    var jsonData = pm.response.json();",
                   "    pm.expect(jsonData.length, 'event count in total').to.eql(2);",
                   "",
-                  "    pm.expect(jsonData[0].id, 'result[0]: \"id\" field').to.eql(1);",
                   "    pm.expect(jsonData[0].description, 'result[0]: \"description\" field').to.eql('user1 descr по самой широкой дороге шел высокий человек');",
-                  "     pm.expect(jsonData[0].eventId, 'result[0]: \"eventId\" field').to.eql(1);",
-                  "     pm.expect(jsonData[0].requester.id, 'result[0]: \"requester\" field').to.eql(1);",
                   "",
-                  "     pm.expect(jsonData[1].id, 'result[1]: \"id\" field').to.eql(3);",
                   "    pm.expect(jsonData[1].description, 'result[1]: \"description\" field').to.eql('user2 descr по самой широкой дороге шел высокий человек');",
-                  "     pm.expect(jsonData[1].eventId, 'result[1]: \"eventId\" field').to.eql(1);",
-                  "     pm.expect(jsonData[1].requester.id, 'result[1]: \"requester\" field').to.eql(2);",
-                  "",
                   "});"
                 ],
                 "type": "text/javascript"
@@ -1767,7 +1742,7 @@
               "variable": [
                 {
                   "key": "eventId",
-                  "value": "1"
+                  "value": "{{eventId1}}"
                 }
               ]
             }
