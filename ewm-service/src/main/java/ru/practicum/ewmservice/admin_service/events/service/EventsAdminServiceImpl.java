@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.ewmservice.dao.comments.CommentRepository;
 import ru.practicum.ewmservice.dao.events.EventsRepository;
 import ru.practicum.ewmservice.dao.requests.RequestsRepository;
 import ru.practicum.ewmservice.dto.events.EventFullDto;
@@ -15,6 +16,7 @@ import ru.practicum.ewmservice.exception.ConflictObjectException;
 import ru.practicum.ewmservice.exception.NotObjectException;
 import ru.practicum.ewmservice.joint.events.JointEvents;
 import ru.practicum.ewmservice.model.QPredicates;
+import ru.practicum.ewmservice.model.comments.Comment;
 import ru.practicum.ewmservice.model.events.Event;
 import ru.practicum.ewmservice.model.events.QEvent;
 import ru.practicum.ewmservice.model.requests.Request;
@@ -32,6 +34,7 @@ import java.util.List;
 public class EventsAdminServiceImpl implements EventsAdminService {
     private final EventsRepository eventsRepository;
     private final RequestsRepository requestsRepository;
+    private final CommentRepository commentRepository;
     private final JointEvents jointEvents;
 
     @Override
@@ -40,6 +43,7 @@ public class EventsAdminServiceImpl implements EventsAdminService {
         List<Event> events;
         List<ViewStats> views;
         List<Request> requests;
+        List<Comment> comments;
 
         Predicate predicate = QPredicates.builder()
                 .add(users, QEvent.event.initiator.id::in)
@@ -58,11 +62,13 @@ public class EventsAdminServiceImpl implements EventsAdminService {
 
         if (events.isEmpty()) {
             requests = List.of();
+            comments = List.of();
         } else {
             requests = requestsRepository.findByEventInAndStatus(events, Status.PENDING);
+            comments = commentRepository.findByEventIn(events);
         }
         log.info("Get events count {} EventsAdminService", events.size());
-        return jointEvents.toEventsFullDto(events, views, requests);
+        return jointEvents.toEventsFullDto(events, views, requests, comments);
     }
 
     @Override

@@ -7,6 +7,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.ewmservice.dao.categories.CategoriesRepository;
+import ru.practicum.ewmservice.dao.comments.CommentRepository;
 import ru.practicum.ewmservice.dao.events.EventsRepository;
 import ru.practicum.ewmservice.dao.location.LocationRepository;
 import ru.practicum.ewmservice.dao.requests.RequestsRepository;
@@ -22,6 +23,7 @@ import ru.practicum.ewmservice.mapper.EventsMapper;
 import ru.practicum.ewmservice.mapper.LocationMapper;
 import ru.practicum.ewmservice.mapper.RequestsMapper;
 import ru.practicum.ewmservice.model.categories.Category;
+import ru.practicum.ewmservice.model.comments.Comment;
 import ru.practicum.ewmservice.model.events.Event;
 import ru.practicum.ewmservice.model.location.Location;
 import ru.practicum.ewmservice.model.requests.Request;
@@ -43,6 +45,7 @@ public class EventsPrivateServiceImpl implements EventsPrivateService {
     private final LocationRepository locationRepository;
     private final CategoriesRepository categoriesRepository;
     private final RequestsRepository requestsRepository;
+    private final CommentRepository commentRepository;
     private final JointEvents jointEvents;
 
     @Override
@@ -52,8 +55,9 @@ public class EventsPrivateServiceImpl implements EventsPrivateService {
         List<Event> events = eventsRepository.findByInitiator(user, PageRequest.of(page, size)).getContent();
         List<ViewStats> views = jointEvents.findViewStats(events, true);
         List<Request> requests = requestsRepository.findByEventInAndStatus(events, Status.PENDING);
+        List<Comment> comments = commentRepository.findByEventIn(events);
         log.info("Get events count {} EventsPrivateService", events.size());
-        return jointEvents.toEventsShortDto(events, views, requests);
+        return jointEvents.toEventsShortDto(events, views, requests, comments);
     }
 
     @Transactional

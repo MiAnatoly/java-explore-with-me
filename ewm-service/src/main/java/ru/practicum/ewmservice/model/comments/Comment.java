@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import ru.practicum.ewmservice.model.events.Event;
 import ru.practicum.ewmservice.model.user.User;
+import ru.practicum.ewmservice.valide.DateCreatedHourAfterUpdate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -16,6 +17,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Entity
 @Table(name = "COMMENTS")
+@DateCreatedHourAfterUpdate
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,6 +25,7 @@ public class Comment {
     private Long id;
     private String description;
     private LocalDateTime created;
+    private LocalDateTime updated;
     @ManyToOne
     @JoinColumn(name = "EVENT_ID")
     private Event event;

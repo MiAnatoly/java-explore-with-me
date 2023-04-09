@@ -22,6 +22,7 @@ public class CommentsMapper {
                 null,
                 newCommentDto.getDescription(),
                 LocalDateTime.now(),
+                null,
                 event,
                 user
         );

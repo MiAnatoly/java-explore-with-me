@@ -53,17 +53,17 @@ public class CommentRepositoryTest {
             true, State.PUBLISHED, "title2 по самой широкой дороге шел высокий человек",
             List.of(), false);
     Comment comment1 = new Comment(null, "user1 descr по самой широкой дороге шел высокий человек",
-            LocalDateTime.now(), event1, user1);
+            LocalDateTime.now(), null, event1, user1);
     Comment comment2 = new Comment(null, "user2 descr по самой широкой дороге шел высокий человек",
-            LocalDateTime.now(), event1, user2);
+            LocalDateTime.now(), null, event1, user2);
     Comment comment3 = new Comment(null, "user3 descr по самой широкой дороге шел высокий человек",
-            LocalDateTime.now(), event1, user3);
+            LocalDateTime.now(), null, event1, user3);
     Comment comment4 = new Comment(null, "user1 descr по самой широкой дороге шел высокий человек",
-            LocalDateTime.now(), event2, user1);
+            LocalDateTime.now(), null, event2, user1);
     Comment comment5 = new Comment(null, "user2 descr по самой широкой дороге шел высокий человек",
-            LocalDateTime.now(), event2, user2);
+            LocalDateTime.now(), null, event2, user2);
     Comment comment6 = new Comment(null, "user3 descr по самой широкой дороге шел высокий человек",
-            LocalDateTime.now(), event2, user2);
+            LocalDateTime.now(), null, event2, user2);
 
 
     @BeforeEach
@@ -86,9 +86,9 @@ public class CommentRepositoryTest {
 
     @Test
     void privateFindByUserTest() {
-        List<Comment> comments1 = commentRepository.findByRequester(user1);
-        List<Comment> comments2 = commentRepository.findByRequester(user2);
-        List<Comment> comments3 = commentRepository.findByRequester(user3);
+        List<Comment> comments1 = commentRepository.findByRequesterAndEvent_State(user1, State.PUBLISHED);
+        List<Comment> comments2 = commentRepository.findByRequesterAndEvent_State(user2, State.PUBLISHED);
+        List<Comment> comments3 = commentRepository.findByRequesterAndEvent_State(user3, State.PUBLISHED);
 
         Comment comment = comments3.get(0);
 

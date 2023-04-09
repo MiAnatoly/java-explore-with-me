@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.ewmservice.dao.comments.CommentRepository;
 import ru.practicum.ewmservice.dao.compilation.CompilationRepository;
 import ru.practicum.ewmservice.dao.events.EventsRepository;
 import ru.practicum.ewmservice.dao.requests.RequestsRepository;
@@ -15,6 +16,7 @@ import ru.practicum.ewmservice.dto.events.EventShortDto;
 import ru.practicum.ewmservice.exception.NotObjectException;
 import ru.practicum.ewmservice.joint.events.JointEvents;
 import ru.practicum.ewmservice.mapper.CompilationMapper;
+import ru.practicum.ewmservice.model.comments.Comment;
 import ru.practicum.ewmservice.model.compilations.Compilation;
 import ru.practicum.ewmservice.model.events.Event;
 import ru.practicum.ewmservice.model.requests.Request;
@@ -31,6 +33,7 @@ public class CompilationAdminServiceImpl implements CompilationsAdminService {
     private final CompilationRepository compilationRepository;
     private final EventsRepository eventsRepository;
     private final RequestsRepository requestsRepository;
+    private final CommentRepository commentRepository;
     private final JointEvents jointEvents;
 
     @Transactional
@@ -48,8 +51,9 @@ public class CompilationAdminServiceImpl implements CompilationsAdminService {
         compilationRepository.save(compilation);
         List<ViewStats> views = jointEvents.findViewStats(events, true);
         List<Request> requests = requestsRepository.findByEventInAndStatus(events, Status.PENDING);
+        List<Comment> comments = commentRepository.findByEventIn(events);
         log.info("Post compilation count events {} CompilationAdminService", events.size());
-        List<EventShortDto> eventsShortDto = jointEvents.toEventsShortDto(events, views, requests);
+        List<EventShortDto> eventsShortDto = jointEvents.toEventsShortDto(events, views, requests, comments);
         return CompilationMapper.toCompilationDto(compilation, eventsShortDto);
     }
 
@@ -73,8 +77,9 @@ public class CompilationAdminServiceImpl implements CompilationsAdminService {
         setUpdateCompilation(compilation, updateCompilationDto, events);
         List<ViewStats> views = jointEvents.findViewStats(events, true);
         List<Request> requests = requestsRepository.findByEventInAndStatus(events, Status.PENDING);
+        List<Comment> comments = commentRepository.findByEventIn(events);
         log.info("Patch compilation count events {} CompilationAdminService", events.size());
-        List<EventShortDto> eventsShortDto = jointEvents.toEventsShortDto(events, views, requests);
+        List<EventShortDto> eventsShortDto = jointEvents.toEventsShortDto(events, views, requests, comments);
         return CompilationMapper.toCompilationDto(compilation, eventsShortDto);
     }
 

@@ -75,17 +75,4 @@ public class WebClientService {
                 .collectList()
                 .block();
     }
-
-    public List<ViewStats> find(LocalDateTime start, LocalDateTime end, Boolean unique) {
-        return webClient.get()
-                .uri(uriBuilder -> uriBuilder.path("/stats")
-                        .queryParam("start", start.format(DATE_TIME_FORMATTER))
-                        .queryParam("end", end.format(DATE_TIME_FORMATTER))
-                        .queryParam("unique", unique)
-                        .build())
-                .retrieve()
-                .bodyToFlux(ViewStats.class)
-                .collectList()
-                .block();
-    }
 }

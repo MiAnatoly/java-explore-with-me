@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -13,6 +14,7 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 @AllArgsConstructor
 public class NewCommentDto {
+    @NotBlank
     @Size(min = 5, max = 2000)
     private String description;
     @NotNull

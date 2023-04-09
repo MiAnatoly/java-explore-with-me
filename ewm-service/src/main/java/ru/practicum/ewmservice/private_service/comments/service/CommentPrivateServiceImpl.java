@@ -17,6 +17,7 @@ import ru.practicum.ewmservice.model.events.Event;
 import ru.practicum.ewmservice.model.user.User;
 import ru.practicum.ewmservice.status.State;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -46,10 +47,12 @@ public class CommentPrivateServiceImpl implements CommentPrivateService {
     public CommentUserDto edit(Long userId, Long comId, UpdateUserCommentDto updateUserCommentDto) {
         User user = usersRepository.findById(userId)
                 .orElseThrow(() -> new NotObjectException("нет пользователя"));
-        Comment comment = commentRepository.findByIdAndRequester(comId, user)
+        Comment comment = commentRepository.findByIdAndRequesterAndEvent_State(comId, user, State.PUBLISHED)
                 .orElseThrow(() -> new NotObjectException(
-                        "комментарий отсутствует или не пренадлежит данному пользователю"));
+                        "комментарий отсутствует, не пренадлежит данному" +
+                                " пользователю или нет опубликованного события"));
         comment.setDescription(updateUserCommentDto.getDescription());
+        comment.setUpdated(LocalDateTime.now());
         return CommentsMapper.toCommentUserDto(comment);
     }
 
@@ -57,7 +60,7 @@ public class CommentPrivateServiceImpl implements CommentPrivateService {
     public List<CommentUserDto> findByUser(Long userId) {
         User user = usersRepository.findById(userId)
                 .orElseThrow(() -> new NotObjectException("нет пользователя"));
-        List<Comment> comments = commentRepository.findByRequester(user);
+        List<Comment> comments = commentRepository.findByRequesterAndEvent_State(user, State.PUBLISHED);
         log.info("Get comments.size {} /CommentPrivateServiceImpl", comments.size());
         return CommentsMapper.toCommentsUserDto(comments);
     }
@@ -66,9 +69,10 @@ public class CommentPrivateServiceImpl implements CommentPrivateService {
     public CommentUserDto findById(Long userId, Long comId) {
         User user = usersRepository.findById(userId)
                 .orElseThrow(() -> new NotObjectException("нет пользователя"));
-        Comment comment = commentRepository.findByIdAndRequester(comId, user)
+        Comment comment = commentRepository.findByIdAndRequesterAndEvent_State(comId, user, State.PUBLISHED)
                 .orElseThrow(() -> new NotObjectException(
-                        "комментарий отсутствует или не пренадлежит данному пользователю"));
+                        "комментарий отсутствует, не пренадлежит данному" +
+                                " пользователю или нет опубликованного события"));
         return CommentsMapper.toCommentUserDto(comment);
     }
 
@@ -77,9 +81,10 @@ public class CommentPrivateServiceImpl implements CommentPrivateService {
     public void delete(Long userId, Long comId) {
         User user = usersRepository.findById(userId)
                 .orElseThrow(() -> new NotObjectException("нет пользователя"));
-        Comment comment = commentRepository.findByIdAndRequester(comId, user)
+        Comment comment = commentRepository.findByIdAndRequesterAndEvent_State(comId, user, State.PUBLISHED)
                 .orElseThrow(() -> new NotObjectException(
-                        "комментарий отсутствует или не пренадлежит данному пользователю"));
+                        "комментарий отсутствует, не пренадлежит данному" +
+                                " пользователю или нет опубликованного события"));
         commentRepository.deleteById(comment.getId());
     }
 }
