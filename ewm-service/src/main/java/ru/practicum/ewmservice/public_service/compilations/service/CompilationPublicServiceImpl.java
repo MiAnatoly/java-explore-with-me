@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.ewmservice.dao.comments.CommentRepository;
 import ru.practicum.ewmservice.dao.compilation.CompilationRepository;
 import ru.practicum.ewmservice.dao.requests.RequestsRepository;
 import ru.practicum.ewmservice.dto.compilation.CompilationDto;
@@ -13,6 +14,7 @@ import ru.practicum.ewmservice.dto.events.EventShortDto;
 import ru.practicum.ewmservice.exception.NotObjectException;
 import ru.practicum.ewmservice.joint.events.JointEvents;
 import ru.practicum.ewmservice.mapper.CompilationMapper;
+import ru.practicum.ewmservice.model.comments.Comment;
 import ru.practicum.ewmservice.model.compilations.Compilation;
 import ru.practicum.ewmservice.model.events.Event;
 import ru.practicum.ewmservice.model.requests.Request;
@@ -30,6 +32,7 @@ import java.util.Map;
 public class CompilationPublicServiceImpl implements CompilationPublicService {
     private final CompilationRepository compilationRepository;
     private final RequestsRepository requestsRepository;
+    private final CommentRepository commentRepository;
     private final JointEvents jointEvents;
 
     @Override
@@ -57,11 +60,11 @@ public class CompilationPublicServiceImpl implements CompilationPublicService {
         compilations.forEach(x -> events.addAll(x.getEvents()));
         List<ViewStats> views = jointEvents.findViewStats(events, true);
         List<Request> requests = requestsRepository.findByEventInAndStatus(events, Status.PENDING);
+        List<Comment> comments = commentRepository.findByEventIn(events);
         Map<Long, List<EventShortDto>> eventsShortDtoMap = new HashMap<>();
         compilations.forEach(x -> eventsShortDtoMap
                 .put(x.getId(), jointEvents.toEventsShortDto(x.getEvents(),
-                        views,
-                        requests)));
+                        views, requests, comments)));
          return eventsShortDtoMap;
     }
 
@@ -69,6 +72,7 @@ public class CompilationPublicServiceImpl implements CompilationPublicService {
         List<Event> events = compilation.getEvents();
         List<ViewStats> views = jointEvents.findViewStats(events, true);
         List<Request> requests = requestsRepository.findByEventInAndStatus(events, Status.PENDING);
-        return jointEvents.toEventsShortDto(events, views, requests);
+        List<Comment> comments = commentRepository.findByEventIn(events);
+        return jointEvents.toEventsShortDto(events, views, requests, comments);
     }
 }

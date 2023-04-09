@@ -1,0 +1,1761 @@
+{
+  "info": {
+    "_postman_id": "de0de2b8-3a3f-4e22-8450-fea6115e6f95",
+    "name": "Explore ewm-service",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "23888341"
+  },
+  "item": [
+    {
+      "name": "Comment",
+      "item": [
+        {
+          "name": "User create 1",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "\r",
+                  "\r",
+                  "pm.test(\"Status code is 200 or 201\", function () {\r",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200,201]);\r",
+                  "});\r",
+                  "pm.test(\"Has user create response\", function () {\r",
+                  "    pm.response.to.be.withBody;\r",
+                  "    pm.response.to.be.json;\r",
+                  "});\r",
+                  "pm.test(\"Test user 'id' field\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('id');\r",
+                  "    pm.globals.set(\"userId1\", jsonData.id);\r",
+                  "});\r",
+                  "pm.test(\"Test user 'email' field\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('email');\r",
+                  "    pm.expect(jsonData.email, '\"email\" must be \"142@mail.ru\"').to.eql('142@mail.ru');\r",
+                  "});\r",
+                  "pm.test(\"Test user 'name' field\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('name');\r",
+                  "    pm.expect(jsonData.name, '\"name\" must be \"Bob1\"').to.eql('Bob1');\r",
+                  "});\r",
+                  "\r",
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"142@mail.ru\",\n  \"name\": \"Bob1\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/admin/users",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "users"
+              ],
+              "query": [
+                {
+                  "key": "",
+                  "value": null,
+                  "disabled": true
+                },
+                {
+                  "key": "userId",
+                  "value": "1",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "User create 2",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200 or 201\", function () {\r",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200,201]);\r",
+                  "});\r",
+                  "pm.test(\"Has user create response\", function () {\r",
+                  "    pm.response.to.be.withBody;\r",
+                  "    pm.response.to.be.json;\r",
+                  "});\r",
+                  "pm.test(\"Test user 'id' field\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('id');\r",
+                  "    pm.globals.set(\"userId2\", jsonData.id);\r",
+                  "});\r",
+                  "pm.test(\"Test user 'description' email\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('email');\r",
+                  "    pm.expect(jsonData.email, '\"email\" must be \"242@mail.ru\"').to.eql('242@mail.ru');\r",
+                  "});\r",
+                  "pm.test(\"Test user 'name' field\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('name');\r",
+                  "    pm.expect(jsonData.name, '\"name\" must be \"Bob2\"').to.eql('Bob2');\r",
+                  "});\r",
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"242@mail.ru\",\n  \"name\": \"Bob2\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/admin/users",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "users"
+              ],
+              "query": [
+                {
+                  "key": "",
+                  "value": null,
+                  "disabled": true
+                },
+                {
+                  "key": "userId",
+                  "value": "1",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "User create 3",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "\r",
+                  "pm.test(\"Status code is 200 or 201\", function () {\r",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200,201]);\r",
+                  "});\r",
+                  "pm.test(\"Has user create response\", function () {\r",
+                  "    pm.response.to.be.withBody;\r",
+                  "    pm.response.to.be.json;\r",
+                  "});\r",
+                  "pm.test(\"Test user 'id' field\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('id');\r",
+                  "    pm.globals.set(\"userId3\", jsonData.id);\r",
+                  "});\r",
+                  "pm.test(\"Test user 'email' field\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('email');\r",
+                  "    pm.expect(jsonData.email, '\"email\" must be \"342@mail.ru\"').to.eql('342@mail.ru');\r",
+                  "});\r",
+                  "pm.test(\"Test user 'name' field\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('name');\r",
+                  "    pm.expect(jsonData.name, '\"name\" must be \"Bob3\"').to.eql('Bob3');\r",
+                  "});\r",
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"342@mail.ru\",\n  \"name\": \"Bob3\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/admin/users",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "users"
+              ],
+              "query": [
+                {
+                  "key": "",
+                  "value": null,
+                  "disabled": true
+                },
+                {
+                  "key": "userId",
+                  "value": "1",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Category create 1",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200 or 201\", function () {\r",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200,201]);\r",
+                  "});\r",
+                  "pm.test(\"Has category create response\", function () {\r",
+                  "    pm.response.to.be.withBody;\r",
+                  "    pm.response.to.be.json;\r",
+                  "});\r",
+                  "pm.test(\"Test category 'id' field\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('id');\r",
+                  "    pm.globals.set(\"categoryId1\", jsonData.id);\r",
+                  "});\r",
+                  "pm.test(\"Test category 'name' field\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('name');\r",
+                  "    pm.expect(jsonData.name, '\"name\" must be \"вечеринка\"').to.eql('вечеринка');\r",
+                  "});\r",
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"вечеринка\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/admin/categories",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "categories"
+              ],
+              "query": [
+                {
+                  "key": "",
+                  "value": null,
+                  "disabled": true
+                },
+                {
+                  "key": "userId",
+                  "value": "1",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Event create 1",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "\r",
+                  "pm.test(\"Status code is 200 or 201\", function () {\r",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200,201]);\r",
+                  "});\r",
+                  "pm.test(\"Has comment create response\", function () {\r",
+                  "    pm.response.to.be.withBody;\r",
+                  "    pm.response.to.be.json;\r",
+                  "});\r",
+                  "pm.test(\"Has comment create response\", function () {\r",
+                  "    pm.response.to.be.withBody;\r",
+                  "    pm.response.to.be.json;\r",
+                  "});\r",
+                  "pm.test(\"Test comment 'id' field\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('id');\r",
+                  "    pm.globals.set(\"eventId1\", jsonData.id);\r",
+                  "});\r",
+                  "pm.test(\"Test event 'title' field\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('title');\r",
+                  "});\r",
+                  "pm.test(\"Test event 'annotation' field\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('annotation');\r",
+                  "});\r",
+                  "pm.test(\"Test event 'category' field\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('category');\r",
+                  "});\r",
+                  "pm.test(\"Test event 'name' paid\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('paid');\r",
+                  "});\r",
+                  "pm.test(\"Test event 'eventDate' field\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('eventDate');\r",
+                  "});\r",
+                  "pm.test(\"Test event 'initiator' field\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('initiator');\r",
+                  "});\r",
+                  "pm.test(\"Test event 'description' field\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('description');\r",
+                  "});\r",
+                  "pm.test(\"Test event 'participantLimit' field\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('participantLimit');\r",
+                  "});\r",
+                  "pm.test(\"Test event 'state' field\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('state');\r",
+                  "});\r",
+                  "pm.test(\"Test event 'createdOn' field\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('createdOn');\r",
+                  "});\r",
+                  "pm.test(\"Test event 'location' field\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('location');\r",
+                  "});\r",
+                  "pm.test(\"Test event 'requestModeration' field\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('requestModeration');\r",
+                  "});\r",
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n\"annotation\": \"Сплав на байдарках похож на полет.\",\n\"category\": {{categoryId1}},\n\"description\": \"Сплав на байдарках похож на полет. На спокойной воде — это парение. На бу\",\n\"eventDate\": \"2024-12-31 15:10:05\",\n\"location\": {\n\"lat\": 55.754167,\n\"lon\": 37.62\n},\n\"paid\": true,\n\"participantLimit\": 10,\n\"requestModeration\": false,\n\"title\": \"Сплав на байдарках\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/users/:userId/events",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                ":userId",
+                "events"
+              ],
+              "query": [
+                {
+                  "key": "",
+                  "value": null,
+                  "disabled": true
+                },
+                {
+                  "key": "userId",
+                  "value": "1",
+                  "disabled": true
+                }
+              ],
+              "variable": [
+                {
+                  "key": "userId",
+                  "value": "{{userId1}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Event create 2",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200 or 201\", function () {\r",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200,201]);\r",
+                  "});\r",
+                  "pm.test(\"Has comment create response\", function () {\r",
+                  "    pm.response.to.be.withBody;\r",
+                  "    pm.response.to.be.json;\r",
+                  "});\r",
+                  "pm.test(\"Has comment create response\", function () {\r",
+                  "    pm.response.to.be.withBody;\r",
+                  "    pm.response.to.be.json;\r",
+                  "});\r",
+                  "pm.test(\"Test comment 'id' field\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('id');\r",
+                  "    pm.globals.set(\"eventId2\", jsonData.id);\r",
+                  "});\r",
+                  "pm.test(\"Test event 'title' field\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('title');\r",
+                  "});\r",
+                  "pm.test(\"Test event 'annotation' field\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('annotation');\r",
+                  "});\r",
+                  "pm.test(\"Test event 'category' field\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('category');\r",
+                  "});\r",
+                  "pm.test(\"Test event 'name' paid\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('paid');\r",
+                  "});\r",
+                  "pm.test(\"Test event 'eventDate' field\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('eventDate');\r",
+                  "});\r",
+                  "pm.test(\"Test event 'initiator' field\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('initiator');\r",
+                  "});\r",
+                  "pm.test(\"Test event 'description' field\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('description');\r",
+                  "});\r",
+                  "pm.test(\"Test event 'participantLimit' field\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('participantLimit');\r",
+                  "});\r",
+                  "pm.test(\"Test event 'state' field\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('state');\r",
+                  "});\r",
+                  "pm.test(\"Test event 'createdOn' field\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('createdOn');\r",
+                  "});\r",
+                  "pm.test(\"Test event 'location' field\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('location');\r",
+                  "});\r",
+                  "pm.test(\"Test event 'requestModeration' field\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('requestModeration');\r",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n\"annotation\": \"поход на гору аю-даг.\",\n\"category\": {{categoryId1}},\n\"description\": \"Поход в гору через северо-западную со стороны военного санатория\",\n\"eventDate\": \"2023-12-31 15:10:05\",\n\"location\": {\n\"lat\": 58.754167,\n\"lon\": 39.62\n},\n\"paid\": true,\n\"participantLimit\": 10,\n\"requestModeration\": false,\n\"title\": \"поход в горы\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/users/:userId/events",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                ":userId",
+                "events"
+              ],
+              "query": [
+                {
+                  "key": "",
+                  "value": null,
+                  "disabled": true
+                },
+                {
+                  "key": "userId",
+                  "value": "1",
+                  "disabled": true
+                }
+              ],
+              "variable": [
+                {
+                  "key": "userId",
+                  "value": "{{userId2}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Comment create not confirmed event",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 404\", function () {\r",
+                  "    pm.expect(pm.response.code).to.be.oneOf([404]);\r",
+                  "});\r",
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"description\": \"user1 descr по самой широкой дороге шел высокий человек\",\n  \"eventId\": {{eventId1}}\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/users/:userId/comments",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                ":userId",
+                "comments"
+              ],
+              "query": [
+                {
+                  "key": "",
+                  "value": null,
+                  "disabled": true
+                },
+                {
+                  "key": "userId",
+                  "value": "1",
+                  "disabled": true
+                }
+              ],
+              "variable": [
+                {
+                  "key": "userId",
+                  "value": "{{userId1}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Event update 1 for CONFIRMED",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200 or 201\", function () {\r",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200,201]);\r",
+                  "});\r",
+                  "pm.test(\"Has comment create response\", function () {\r",
+                  "    pm.response.to.be.withBody;\r",
+                  "    pm.response.to.be.json;\r",
+                  "});\r",
+                  "pm.test(\"Has comment create response\", function () {\r",
+                  "    pm.response.to.be.withBody;\r",
+                  "    pm.response.to.be.json;\r",
+                  "});\r",
+                  "pm.test(\"Test comment 'id' field\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('id');\r",
+                  "});\r",
+                  "pm.test(\"Test event 'title' field\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('title');\r",
+                  "    pm.expect(jsonData.title, '\"Сплав на байдарках\"').to.eql('Сплав на байдарках');\r",
+                  "});\r",
+                  "pm.test(\"Test event 'annotation' field\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('annotation');\r",
+                  "    pm.expect(jsonData.annotation, 'Сплав на байдарках похож на полет.').to.eql('Сплав на байдарках похож на полет.');\r",
+                  "});\r",
+                  "pm.test(\"Test event 'category' field\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('category');\r",
+                  "});\r",
+                  "pm.test(\"Test event 'name' paid\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('paid');\r",
+                  "});\r",
+                  "pm.test(\"Test event 'eventDate' field\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('eventDate');\r",
+                  "});\r",
+                  "pm.test(\"Test event 'initiator' field\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('initiator');\r",
+                  "});\r",
+                  "pm.test(\"Test event 'description' field\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('description');\r",
+                  "});\r",
+                  "pm.test(\"Test event 'participantLimit' field\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('participantLimit');\r",
+                  "});\r",
+                  "pm.test(\"Test event 'state' field\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('state');\r",
+                  "});\r",
+                  "pm.test(\"Test event 'createdOn' field\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('createdOn');\r",
+                  "});\r",
+                  "pm.test(\"Test event 'location' field\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('location');\r",
+                  "});\r",
+                  "pm.test(\"Test event 'requestModeration' field\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('requestModeration');\r",
+                  "});\r",
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n\"stateAction\": \"PUBLISH_EVENT\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/admin/events/:eventId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "events",
+                ":eventId"
+              ],
+              "query": [
+                {
+                  "key": "",
+                  "value": null,
+                  "disabled": true
+                },
+                {
+                  "key": "userId",
+                  "value": "1",
+                  "disabled": true
+                }
+              ],
+              "variable": [
+                {
+                  "key": "eventId",
+                  "value": "{{eventId1}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Comment create 1",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "\r",
+                  "pm.test(\"Status code is 200 or 201\", function () {\r",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200,201]);\r",
+                  "});\r",
+                  "pm.test(\"Has user create response\", function () {\r",
+                  "    pm.response.to.be.withBody;\r",
+                  "    pm.response.to.be.json;\r",
+                  "});\r",
+                  "pm.test(\"Test user 'id' field\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('id');\r",
+                  "    pm.globals.set(\"commentId1\", jsonData.id);\r",
+                  "});\r",
+                  "pm.test(\"Test user 'description' field\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('description');\r",
+                  "    pm.expect(jsonData.description, '\"user1 descr по самой широкой дороге шел высокий человек\"').to.eql('user1 descr по самой широкой дороге шел высокий человек');\r",
+                  "});\r",
+                  "pm.test(\"Test user 'created' field\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('created');\r",
+                  "});\r",
+                  "pm.test(\"Test user 'eventId' field\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('eventId');\r",
+                  "});\r",
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"description\": \"user1 descr по самой широкой дороге шел высокий человек\",\n  \"eventId\": {{eventId1}}\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/users/:userId/comments",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                ":userId",
+                "comments"
+              ],
+              "query": [
+                {
+                  "key": "",
+                  "value": null,
+                  "disabled": true
+                },
+                {
+                  "key": "userId",
+                  "value": "1",
+                  "disabled": true
+                }
+              ],
+              "variable": [
+                {
+                  "key": "userId",
+                  "value": "{{userId1}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Event update 2 for CONFIRMED",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200 or 201\", function () {\r",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200,201]);\r",
+                  "});\r",
+                  "pm.test(\"Has comment create response\", function () {\r",
+                  "    pm.response.to.be.withBody;\r",
+                  "    pm.response.to.be.json;\r",
+                  "});\r",
+                  "pm.test(\"Has comment create response\", function () {\r",
+                  "    pm.response.to.be.withBody;\r",
+                  "    pm.response.to.be.json;\r",
+                  "});\r",
+                  "pm.test(\"Test comment 'id' field\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('id');\r",
+                  "});\r",
+                  "pm.test(\"Test event 'title' field\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('title');\r",
+                  "    pm.expect(jsonData.title, '\"поход в горы\"').to.eql('поход в горы');\r",
+                  "});\r",
+                  "pm.test(\"Test event 'annotation' field\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('annotation');\r",
+                  "    pm.expect(jsonData.annotation, \"поход на гору аю-даг.\").to.eql('поход на гору аю-даг.');\r",
+                  "});\r",
+                  "pm.test(\"Test event 'category' field\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('category');\r",
+                  "});\r",
+                  "pm.test(\"Test event 'name' paid\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('paid');\r",
+                  "});\r",
+                  "pm.test(\"Test event 'eventDate' field\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('eventDate');\r",
+                  "});\r",
+                  "pm.test(\"Test event 'initiator' field\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('initiator');\r",
+                  "});\r",
+                  "pm.test(\"Test event 'description' field\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('description');\r",
+                  "});\r",
+                  "pm.test(\"Test event 'participantLimit' field\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('participantLimit');\r",
+                  "});\r",
+                  "pm.test(\"Test event 'state' field\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('state');\r",
+                  "});\r",
+                  "pm.test(\"Test event 'createdOn' field\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('createdOn');\r",
+                  "});\r",
+                  "pm.test(\"Test event 'location' field\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('location');\r",
+                  "});\r",
+                  "pm.test(\"Test event 'requestModeration' field\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('requestModeration');\r",
+                  "});\r",
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n\"stateAction\": \"PUBLISH_EVENT\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/admin/events/:eventId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "events",
+                ":eventId"
+              ],
+              "query": [
+                {
+                  "key": "",
+                  "value": null,
+                  "disabled": true
+                },
+                {
+                  "key": "userId",
+                  "value": "1",
+                  "disabled": true
+                }
+              ],
+              "variable": [
+                {
+                  "key": "eventId",
+                  "value": "{{eventId2}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Comment create 2",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "\r",
+                  "pm.test(\"Status code is 200 or 201\", function () {\r",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200,201]);\r",
+                  "});\r",
+                  "pm.test(\"Has user create response\", function () {\r",
+                  "    pm.response.to.be.withBody;\r",
+                  "    pm.response.to.be.json;\r",
+                  "});\r",
+                  "pm.test(\"Test user 'id' field\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('id');\r",
+                  "    pm.globals.set(\"commentId2\", jsonData.id);\r",
+                  "});\r",
+                  "pm.test(\"Test user 'description' field\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('description');\r",
+                  "    pm.expect(jsonData.description, '\"user1 descr по самой широкой дороге шел высокий человек\"').to.eql('user1 descr по самой широкой дороге шел высокий человек');\r",
+                  "});\r",
+                  "pm.test(\"Test user 'created' field\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('created');\r",
+                  "});\r",
+                  "pm.test(\"Test user 'eventId' field\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('eventId');\r",
+                  "});\r",
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"description\": \"user1 descr по самой широкой дороге шел высокий человек\",\n  \"eventId\": {{eventId2}}\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/users/:userId/comments",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                ":userId",
+                "comments"
+              ],
+              "query": [
+                {
+                  "key": "",
+                  "value": null,
+                  "disabled": true
+                },
+                {
+                  "key": "userId",
+                  "value": "1",
+                  "disabled": true
+                }
+              ],
+              "variable": [
+                {
+                  "key": "userId",
+                  "value": "{{userId1}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Comment create 3",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "\r",
+                  "pm.test(\"Status code is 200 or 201\", function () {\r",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200,201]);\r",
+                  "});\r",
+                  "pm.test(\"Has user create response\", function () {\r",
+                  "    pm.response.to.be.withBody;\r",
+                  "    pm.response.to.be.json;\r",
+                  "});\r",
+                  "pm.test(\"Test user 'id' field\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('id');\r",
+                  "    pm.globals.set(\"commentId3\", jsonData.id);\r",
+                  "});\r",
+                  "pm.test(\"Test user 'description' field\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('description');\r",
+                  "    pm.expect(jsonData.description, '\"user2 descr по самой широкой дороге шел высокий человек\"').to.eql('user2 descr по самой широкой дороге шел высокий человек');\r",
+                  "});\r",
+                  "pm.test(\"Test user 'created' field\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('created');\r",
+                  "});\r",
+                  "pm.test(\"Test user 'eventId' field\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('eventId');\r",
+                  "});\r",
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"description\": \"user2 descr по самой широкой дороге шел высокий человек\",\n  \"eventId\": {{eventId1}}\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/users/:userId/comments",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                ":userId",
+                "comments"
+              ],
+              "query": [
+                {
+                  "key": "",
+                  "value": null,
+                  "disabled": true
+                },
+                {
+                  "key": "userId",
+                  "value": "1",
+                  "disabled": true
+                }
+              ],
+              "variable": [
+                {
+                  "key": "userId",
+                  "value": "{{userId2}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Comment get by id",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});",
+                  "pm.test(\"Test get comment\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('id');",
+                  "    pm.expect(jsonData.description, '\"description\" field').to.eql('user1 descr по самой широкой дороге шел высокий человек');",
+                  "    pm.expect(jsonData).to.have.property('created');",
+                  "    pm.expect(jsonData).to.have.property('eventId');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/users/:userId/comments/:comId:",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                ":userId",
+                "comments",
+                ":comId:"
+              ],
+              "variable": [
+                {
+                  "key": "userId",
+                  "value": "{{userId1}}"
+                },
+                {
+                  "key": "comId:",
+                  "value": "{{commentId1}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Comment create 4",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "\r",
+                  "pm.test(\"Status code is 200 or 201\", function () {\r",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200,201]);\r",
+                  "});\r",
+                  "pm.test(\"Has user create response\", function () {\r",
+                  "    pm.response.to.be.withBody;\r",
+                  "    pm.response.to.be.json;\r",
+                  "});\r",
+                  "pm.test(\"Test user 'id' field\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('id');\r",
+                  "    pm.globals.set(\"commentId4\", jsonData.id);\r",
+                  "});\r",
+                  "pm.test(\"Test user 'description' field\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('description');\r",
+                  "    pm.expect(jsonData.description, '\"user3 descr по самой широкой дороге шел высокий человек\"').to.eql('user3 descr по самой широкой дороге шел высокий человек');\r",
+                  "});\r",
+                  "pm.test(\"Test user 'created' field\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('created');\r",
+                  "});\r",
+                  "pm.test(\"Test user 'eventId' field\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('eventId');\r",
+                  "});\r",
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"description\": \"user3 descr по самой широкой дороге шел высокий человек\",\n  \"eventId\": {{eventId1}}\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/users/:userId/comments",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                ":userId",
+                "comments"
+              ],
+              "query": [
+                {
+                  "key": "",
+                  "value": null,
+                  "disabled": true
+                },
+                {
+                  "key": "userId",
+                  "value": "1",
+                  "disabled": true
+                }
+              ],
+              "variable": [
+                {
+                  "key": "userId",
+                  "value": "{{userId3}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Comment get All by user",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});",
+                  "pm.test(\"Test get all event by user\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.length, 'event count in total').to.eql(2);",
+                  "    pm.expect(jsonData[0].description, 'result[0]: \"description\" field').to.eql('user1 descr по самой широкой дороге шел высокий человек');",
+                  "",
+                  "    pm.expect(jsonData[1].description, 'result[1]: \"description\" field').to.eql('user1 descr по самой широкой дороге шел высокий человек');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/users/:userId/comments",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                ":userId",
+                "comments"
+              ],
+              "variable": [
+                {
+                  "key": "userId",
+                  "value": "{{userId1}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Comment delete by id",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/users/:userId/comments/:comId:",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                ":userId",
+                "comments",
+                ":comId:"
+              ],
+              "variable": [
+                {
+                  "key": "userId",
+                  "value": "{{userId1}}"
+                },
+                {
+                  "key": "comId:",
+                  "value": "{{commentId2}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Comment get All by user delet 2 comment",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});",
+                  "pm.test(\"Test get all event by user\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.length, 'event count in total').to.eql(1);",
+                  "",
+                  "    pm.expect(jsonData[0].description, 'result[0]: \"description\" field').to.eql('user1 descr по самой широкой дороге шел высокий человек');",
+                  "",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/users/:userId/comments",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                ":userId",
+                "comments"
+              ],
+              "variable": [
+                {
+                  "key": "userId",
+                  "value": "{{userId1}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Comment create 5",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "\r",
+                  "pm.test(\"Status code is 200 or 201\", function () {\r",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200,201]);\r",
+                  "});\r",
+                  "pm.test(\"Has user create response\", function () {\r",
+                  "    pm.response.to.be.withBody;\r",
+                  "    pm.response.to.be.json;\r",
+                  "});\r",
+                  "pm.test(\"Test user 'id' field\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('id');\r",
+                  "    pm.globals.set(\"commentId5\", jsonData.id);\r",
+                  "});\r",
+                  "pm.test(\"Test user 'description' field\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('description');\r",
+                  "    pm.expect(jsonData.description, '\"user1 descr по самой широкой дороге шел высокий человек\"').to.eql('user1 descr по самой широкой дороге шел высокий человек');\r",
+                  "});\r",
+                  "pm.test(\"Test user 'created' field\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('created');\r",
+                  "});\r",
+                  "pm.test(\"Test user 'eventId' field\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property('eventId');\r",
+                  "});\r",
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"description\": \"user1 descr по самой широкой дороге шел высокий человек\",\n  \"eventId\": {{eventId2}}\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/users/:userId/comments",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                ":userId",
+                "comments"
+              ],
+              "query": [
+                {
+                  "key": "",
+                  "value": null,
+                  "disabled": true
+                },
+                {
+                  "key": "userId",
+                  "value": "1",
+                  "disabled": true
+                }
+              ],
+              "variable": [
+                {
+                  "key": "userId",
+                  "value": "{{userId1}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Comment get public",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});",
+                  "pm.test(\"Test get all event by user\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.length, 'event count in total').to.eql(3);",
+                  "",
+                  "    pm.expect(jsonData[0].description, 'result[0]: \"description\" field').to.eql('user1 descr по самой широкой дороге шел высокий человек');",
+                  "",
+                  "    pm.expect(jsonData[1].description, 'result[1]: \"description\" field').to.eql('user2 descr по самой широкой дороге шел высокий человек');",
+                  "",
+                  "    pm.expect(jsonData[2].description, 'result[2]: \"description\" field').to.eql('user3 descr по самой широкой дороге шел высокий человек');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/comments/events/:eventId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "comments",
+                "events",
+                ":eventId"
+              ],
+              "variable": [
+                {
+                  "key": "eventId",
+                  "value": "{{eventId1}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Comment delete Admin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/comments/:comId:",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "comments",
+                ":comId:"
+              ],
+              "variable": [
+                {
+                  "key": "comId:",
+                  "value": "{{commentId4}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Comment get public Delete comment Admin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});",
+                  "pm.test(\"Test get all event by user\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.length, 'event count in total').to.eql(2);",
+                  "",
+                  "    pm.expect(jsonData[0].description, 'result[0]: \"description\" field').to.eql('user1 descr по самой широкой дороге шел высокий человек');",
+                  "",
+                  "    pm.expect(jsonData[1].description, 'result[1]: \"description\" field').to.eql('user2 descr по самой широкой дороге шел высокий человек');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "*/*",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/comments/events/:eventId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "comments",
+                "events",
+                ":eventId"
+              ],
+              "variable": [
+                {
+                  "key": "eventId",
+                  "value": "{{eventId1}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    }
+  ]
+}

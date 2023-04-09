@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.ewmservice.dao.comments.CommentRepository;
 import ru.practicum.ewmservice.dao.events.EventsRepository;
 import ru.practicum.ewmservice.dao.requests.RequestsRepository;
 import ru.practicum.ewmservice.dto.events.EventSearch;
@@ -14,6 +15,7 @@ import ru.practicum.ewmservice.dto.events.EventFullDto;
 import ru.practicum.ewmservice.exception.NotObjectException;
 import ru.practicum.ewmservice.joint.events.JointEvents;
 import ru.practicum.ewmservice.model.QPredicates;
+import ru.practicum.ewmservice.model.comments.Comment;
 import ru.practicum.ewmservice.model.events.Event;
 import ru.practicum.ewmservice.model.events.QEvent;
 import ru.practicum.ewmservice.model.requests.Request;
@@ -32,6 +34,7 @@ public class EventsPublicServiceImpl implements EventsPublicService {
     private final EventsRepository eventsRepository;
     private final RequestsRepository requestsRepository;
     private final JointEvents jointEvents;
+    private final CommentRepository commentRepository;
 
     @Transactional
     @Override
@@ -63,9 +66,10 @@ public class EventsPublicServiceImpl implements EventsPublicService {
         List<ViewStats> views = jointEvents.findViewStats(events, true);
 
         List<Request> requests = requestsRepository.findByEventInAndStatus(events, Status.PENDING);
+        List<Comment> comments = commentRepository.findByEventIn(events);
         jointEvents.addHitWeb(request);
         log.info("Get events count {} EventsPublicService", events.size());
-        List<EventFullDto> sortEvents = jointEvents.toEventsFullDto(events, views, requests);
+        List<EventFullDto> sortEvents = jointEvents.toEventsFullDto(events, views, requests, comments);
         if (filter.getSort() == null) {
             return sortEvents;
         }
